@@ -1,1 +1,9 @@
 # computational-investing
+
+This lecture series, "Computational Investing with Python," is designed to provide a comprehensive overview of essential concepts in modern investment strategies and portfolio management, all through the lens of Python programming. The course begins by introducing foundational topics such as arithmetic and logarithmic return measurements, alongside various risk and reward measures including annualized returns, volatility, and ratios like Sharpe and Sortino. It delves into the Capital Asset Pricing Model (CAPM) to lay the groundwork for understanding asset pricing and risk management.
+
+Building upon these basics, the series progresses into Modern Portfolio Theory (MPT), exploring diverse portfolio construction techniques. From the classic Equally Weighted and Minimum Variance portfolios to more sophisticated approaches like Mean-Variance, Black-Litterman, and Multi-Factor Models, the lectures provide both theoretical knowledge and practical Python coding examples. Special attention is given to advanced strategies like Risk-Parity and Beta-Neutral portfolios, including a unique take on optimizing the covariance matrix.
+
+The final section focuses on back-testing methodologies, crucial for evaluating the performance of investment strategies. It covers techniques like Rolling and Expanding Windows, providing insights into their application in real-world scenarios. The series concludes with practical applications, tying together theory and computation, to equip students with the skills necessary to implement and assess their investment strategies in the dynamic world of finance.
+
+Overall, this lecture series is tailored for those looking to blend financial theory with practical Python-based applications, offering a deep dive into computational investing strategies for both academic and professional advancement.
