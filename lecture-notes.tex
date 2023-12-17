@@ -1,0 +1,343 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{listings}
+\usepackage{amsmath}
+\usepackage{color} % For coloring code
+
+% Define colors for code listing
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+% Code listing style
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\lstset{style=mystyle}
+
+\title{Computational Investing with Python}
+\author{Alexandre Landi\thanks{Emails: alexandre.landi1@ibm.com,
+alexandre.landi@skema.edu,
+alandi3@gatech.edu,
+alexandre.landi@balanced-research.com} \\
+    \textit{IBM} \\
+    \textit{Skema Business School} \\
+    \textit{Georgia Institute of Technology} \\
+    \textit{Balanced Research} }
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+This lecture series, "Computational Investing with Python," is designed to provide a comprehensive overview of essential concepts in modern investment strategies and portfolio management, all through the lens of Python programming. The course begins by introducing foundational topics such as arithmetic and logarithmic return measurements, alongside various risk and reward measures including annualized returns, volatility, and ratios like Sharpe and Sortino. It delves into the Capital Asset Pricing Model (CAPM) to lay the groundwork for understanding asset pricing and risk management.
+
+Building upon these basics, the series progresses into Modern Portfolio Theory (MPT), exploring diverse portfolio construction techniques. From the classic Equally Weighted and Minimum Variance portfolios to more sophisticated approaches like Mean-Variance, Black-Litterman, and Multi-Factor Models, the lectures provide both theoretical knowledge and practical Python coding examples. Special attention is given to advanced strategies like Risk-Parity and Beta-Neutral portfolios, including a unique take on optimizing the covariance matrix.
+
+The final section focuses on back-testing methodologies, crucial for evaluating the performance of investment strategies. It covers techniques like Rolling and Expanding Windows, providing insights into their application in real-world scenarios. The series concludes with practical applications, tying together theory and computation, to equip students with the skills necessary to implement and assess their investment strategies in the dynamic world of finance.
+
+Overall, this lecture series is tailored for those looking to blend financial theory with practical Python-based applications, offering a deep dive into computational investing strategies for both academic and professional advancement.
+\end{abstract}
+
+\section{Measuring Performance}
+
+Imagine you are a portfolio manager entrusted with managing \$10 millions. Your primary goal is to grow this amount through strategic investments, but how will you measure your performance? This is where the concept of returns comes into play, and understanding different methods of calculating returns is crucial for your success as a portfolio manager.
+
+\subsection{Introducing Arithmetic Returns}
+
+Arithmetic returns, also known as simple returns, are the most straightforward way to measure the performance of your investments. Let's say you invest the entire \$10 millions in one stock, and after a year, its value increases to \$11 millions. Your arithmetic return would be calculated as follows:
+
+\begin{align*}
+    \text{Arithmetic Return} &= \frac{\text{End Value} - \text{Beginning Value}}{\text{Beginning Value}} \\
+                             &= \frac{\$11\text{M} - \$10\text{M}}{\$10\text{M}} \\
+                             &= 0.1 \text{ or } 10\%
+\end{align*}
+
+This calculation seems intuitive and straightforward, right? However, arithmetic returns have limitations, especially when you are dealing with multiple time periods.
+
+\subsection{The Problem with Arithmetic Returns}
+
+Arithmetic returns are not time-additive. This means that if you want to calculate the total return over a multi-year period, simply adding annual returns can lead to incorrect results. This limitation becomes apparent in volatile markets where investment values fluctuate significantly. \\
+
+For example, consider a scenario where your investment grows by 10\% in the first year but then falls by 10\% in the second year. The arithmetic return for each year would be +10\% and -10\%, respectively. You might think that your total return over these two years is 0\% (since +10\% - 10\% = 0\%). However, this is not the case because the 10\% loss in the second year is on the increased amount from the first year, not the original investment. \\
+
+\textbf{Example:}
+
+Assume you start with a capital of \$10 million. Your investment experiences different returns over two years:
+
+\begin{itemize}
+    \item Year 1: The investment grows by 10\%.
+    \item Year 2: The investment falls by 10\%.
+\end{itemize}
+
+\textbf{Calculation Using Arithmetic Returns:}
+
+\begin{itemize}
+    \item \textbf{End of Year 1:}
+      \[ \text{Capital} = \$10\text{M} \times (1 + 10\%) = \$11\text{M} \]
+    \item \textbf{End of Year 2:}
+      \[ \text{Capital} = \$11\text{M} \times (1 - 10\%) = \$9.9\text{M} \]
+    \item \textbf{Total Arithmetic Return:}
+      \[ 10\% + (-10\%) = 0\% \]
+\end{itemize}
+
+Despite the arithmetic return suggesting a total return of 0\% over the two years, the actual capital at the end of Year 2 is \$9.9 million, not the original \$10 million. This example clearly demonstrates that simply adding up annual arithmetic returns can lead to incorrect conclusions about the overall investment performance, particularly in volatile markets.
+
+\subsection{Addressing the Issue with Logarithmic Returns}
+
+Unlike arithmetic returns, logarithmic returns provide a more accurate representation of investment performance over multiple periods, especially in volatile markets. Let's revisit the previous example using logarithmic returns. \\
+
+\textbf{Example Revisited with Logarithmic Returns:}
+
+Assume the same investment scenario with a starting capital of \$10 million:
+
+\begin{itemize}
+    \item Year 1: The investment grows by 10\%.
+    \item Year 2: The investment falls by 10\%.
+\end{itemize}
+
+\textbf{Calculation Using Logarithmic Returns:}
+
+\begin{itemize}
+    \item \textbf{End of Year 1:}
+      \[ \text{Log Return Year 1} = \ln(1 + 10\%) = \ln(1.10) \]
+    \item \textbf{End of Year 2:}
+      \[ \text{Log Return Year 2} = \ln(1 - 10\%) = \ln(0.90) \]
+    \item \textbf{Total Logarithmic Return:}
+      \begin{align*}
+      \text{Total} &= \ln(1.10) + \ln(0.90) \\
+                   &\approx 0.095 + (-0.105) \\
+                   &\approx -0.01 \text{ or } -1\%
+      \end{align*}
+\end{itemize}
+
+This looks much better, because \$10 millions minus 1\% of \$10 millions equals \$9.9 millions, which is the actual capital that we expected to have at the end of year 2. Eureka! \\
+
+This approach accurately reflects the compounded effect of returns over time. Unlike the arithmetic method, logarithmic returns take into account the sequence of returns and the impact of gains and losses on the evolving investment value. As a result, the total logarithmic return provides a more realistic picture of the investment performance across multiple periods, especially in markets with significant fluctuations.          
+\\
+
+\subsection{Another Example: Arithmetic vs. Logarithmic Returns}
+
+Now let's say that our \$10 million portfolio changes over three years as follows:
+
+\begin{itemize}
+    \item Year 1: \$12 million
+    \item Year 2: \$9 million
+    \item Year 3: \$13.5 million
+\end{itemize}
+
+\subsubsection{Arithmetic Returns Calculation}
+
+\begin{align*}
+    \text{Year 1 Arithmetic Return} &= \frac{\$12M - \$10M}{\$10M} = 0.20 \, \text{(or 20\%)} \\
+    \text{Year 2 Arithmetic Return} &= \frac{\$9M - \$12M}{\$12M} = -0.25 \, \text{(or -25\%)} \\
+    \text{Year 3 Arithmetic Return} &= \frac{\$13.5M - \$9M}{\$9M} = 0.50 \\
+    \text{Total Arithmetic Return} &= 20\% - 25\% + 50\% = 45\%
+\end{align*}
+
+Again, this doesn't look right. Our \$10 million portfolio did not grow by 45\%, but rather 35\%. So now let's try with logarithmic returns:
+
+\subsubsection{Logarithmic Returns Calculation}
+
+\begin{align*}
+    \text{Year 1 Logarithmic Return} &= \ln\left(\frac{\$12M}{\$10M}\right) = \ln(1.20) \\
+    \text{Year 2 Logarithmic Return} &= \ln\left(\frac{\$9M}{\$12M}\right) = \ln(0.75) \\
+    \text{Year 3 Logarithmic Return} &= \ln\left(\frac{\$13.5M}{\$9M}\right) = \ln(1.5) \\
+\end{align*}
+
+\begin{align*}
+    \text{Total Logarithmic Return} &= \ln(1.20) + \ln(0.75) + \ln(1.5) \\
+                                    &\approx 0.18 + (-0.29) + 0.41 \\
+                                    &\approx 0.30 \text{ or } 30\%
+\end{align*}
+
+That looks a little bit closer, but not quite right yet. We had \$10 millions at year 0 and we have \$13.5 millions at year 3, hence we would expect a cumulative return of 35\%, not 30\%. 
+
+\subsubsection{Calculating Final Investment Value Using Logarithmic Returns}
+
+Logarithmic returns provide a nuanced way to measure investment performance over multiple periods. To convert the total logarithmic return to an actual final investment value, we need to follow specific steps. Let's see how this is done: \\
+
+\textbf{Steps to Calculate Final Value:}
+
+Assuming an initial investment value and a calculated total logarithmic return over multiple periods, the final investment value is computed as follows:
+
+\begin{enumerate}
+    \item \textbf{Exponentiate the Total Logarithmic Return:} This step reverses the logarithmic operation, translating the compounded growth rate back to a multiplicative factor.
+    \begin{align*}
+        \text{Growth Factor} &= e^{\text{Total Logarithmic Return}}
+    \end{align*}
+    
+    \item \textbf{Multiply by Initial Investment Value:} The growth factor is then applied to the initial value to get the final investment value.
+    \begin{align*}
+        \text{Final Investment Value} &= \text{Initial Value} \times \text{Growth Factor}
+    \end{align*}
+\end{enumerate}
+
+\textbf{Why Exponentiate the Total Logarithmic Return?}
+
+Logarithmic returns convert multiplicative growth rates into additive values, making them ideal for analyzing compounded growth over time. To revert these additive values back to a growth factor, we use exponentiation. Here's the algebraic rationale:
+
+\begin{enumerate}
+    \item \textbf{Inverting the Logarithm:}
+          Logarithmic returns represent the natural logarithm (ln) of growth ratios. The inverse of taking a logarithm is exponentiation (raising e to the power of the logarithmic return).
+          \begin{align*}
+              \text{If } \text{Log Return} &= \ln(\text{Growth Ratio}) \\
+              \text{Then } \text{Growth Ratio} &= e^{\text{Log Return}}
+          \end{align*}
+
+    \item \textbf{Applying to Total Logarithmic Return:}
+          The total logarithmic return over multiple periods represents the cumulative compounded growth in logarithmic terms. Exponentiating this value converts it back to a real growth factor.
+          \begin{align*}
+              \text{Growth Factor} &= e^{\text{Total Logarithmic Return}}
+          \end{align*}
+\end{enumerate}
+
+\textbf{Calculating the Final Investment Value:}
+
+Given the total logarithmic return and the initial investment value, the final value is calculated as follows:
+
+\begin{enumerate}
+    \item \textbf{Exponentiate the Total Logarithmic Return:}
+          \begin{align*}
+              \text{Growth Factor} &= e^{\text{Total Logarithmic Return}}
+          \end{align*}
+
+    \item \textbf{Multiply by Initial Investment Value:}
+          \begin{align*}
+              \text{Final Investment Value} &= \text{Initial Investment Value} \times \text{Growth Factor}
+          \end{align*}
+\end{enumerate}
+
+\textbf{Example:}
+
+Let's apply these steps to our previous example:
+
+\begin{itemize}
+    \item Initial Investment Value: \$10 million
+    \item Total Logarithmic Return over 3 Years: Approximately 0.30
+\end{itemize}
+
+\begin{enumerate}
+    \item Calculate the growth factor:
+    \begin{align*}
+        \text{Growth Factor} &= e^{0.30}
+    \end{align*}
+    
+    \item Calculate the final investment value:
+    \begin{align*}
+        \text{Final Investment Value} &= \text{Initial Value} \times \text{Growth Factor} \\
+                                      &= \$10M \times e^{0.30} \\
+                                      &\approx \$10M \times 1.35 \\
+                                      &\approx \$13.5M
+    \end{align*}
+\end{enumerate}
+
+
+Yay! This calculation provides the actual value of the investment at the end of the period, reflecting the compounded growth captured by the logarithmic returns. \\
+
+If you just wanted to know the percentage cumulative return, we would simply subtract 1 from the growth factor.
+
+\begin{align*}
+    \text{Cumulative Return} &= \text{Growth Factor} - 1 \\
+                             &= e^{0.30} - 1 \\
+                             &\approx 1.35 - 1 \\
+                             &\approx 0.35 \text{ or } 35\%
+\end{align*}
+
+Eureka!
+
+\subsubsection{Comparison and Conclusion}
+
+While the arithmetic method suggests a total return of 45\% over three years, the logarithmic method, which accurately accounts for compounding, indicates a different (and more accurate) cumulative return of 35\%. This example highlights the importance of using logarithmic returns for a more accurate assessment of portfolio performance over multiple periods.
+
+\subsection{Python Exercise: Calculating and Visualizing Returns}
+
+You are given a dataset representing the annual closing values of an investment portfolio over a five-year period with more volatile values. Calculate both the arithmetic and logarithmic returns for each year, the total returns over the entire period, and visualize the cumulative returns to see the difference visually. 
+
+Annual closing values of the portfolio (in millions USD):
+
+\begin{itemize}
+    \item Year 0: \$10.0
+    \item Year 1: \$12.5
+    \item Year 2: \$8.0
+    \item Year 3: \$13.5
+    \item Year 4: \$7.5
+    \item Year 5: \$15.0
+\end{itemize}
+
+\subsubsection{Calculate and Plot Annual Arithmetic and Logarithmic Returns}
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Updated portfolio values
+values = np.array([10.0, 12.5, 8.0, 13.5, 7.5, 15.0])
+
+# Calculating arithmetic and logarithmic returns
+arithmetic_returns = (values[1:] - values[:-1]) / values[:-1]
+log_returns = np.log(values[1:] / values[:-1])
+
+# Plotting the returns
+plt.figure(figsize=(10, 6))
+plt.plot(arithmetic_returns, label='Arithmetic Returns', marker='o')
+plt.plot(log_returns, label='Logarithmic Returns', marker='x')
+plt.title('Annual Arithmetic vs. Logarithmic Returns')
+plt.xlabel('Year')
+plt.ylabel('Returns')
+plt.legend()
+plt.grid(True)
+plt.show()
+\end{lstlisting}
+
+\subsubsection{Calculate and Plot Cumulative Returns}
+
+\begin{lstlisting}[language=Python]
+# Calculating cumulative returns
+cumulative_arithmetic_return = np.cumsum(arithmetic_returns)
+cumulative_logarithmic_return = np.exp(np.cumsum(log_returns)) - 1
+
+# Plotting cumulative returns
+plt.figure(figsize=(10, 6))
+plt.plot(cumulative_arithmetic_return, label='Cumulative Arithmetic Returns', marker='o')
+plt.plot(cumulative_logarithmic_return, label='Cumulative Logarithmic Returns', marker='x')
+plt.title('Cumulative Arithmetic vs. Logarithmic Returns')
+plt.xlabel('Year')
+plt.ylabel('Cumulative Returns')
+plt.legend()
+plt.grid(True)
+plt.show()
+\end{lstlisting}
+
+\subsubsection{Compare and Discuss}
+
+After plotting the returns, compare the graphs of arithmetic and logarithmic returns, as well as their cumulative returns. Discuss the visual differences and the implications of these differences for investment performance measurement.
+
+\subsubsection{Expected Outcomes}
+
+By now, you should be able to:
+\begin{itemize}
+    \item Write a Python script to calculate, compare, and plot arithmetic and logarithmic returns.
+    \item Visualize the difference in cumulative returns using matplotlib.
+    \item Articulate the insights gained from the visual comparison of the two methods.
+\end{itemize}
+
+
+\end{document}
