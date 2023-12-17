@@ -1,4 +1,4 @@
-# computational-investing
+# Computational Investing with Python
 
 This lecture series, "Computational Investing with Python," is designed to provide a comprehensive overview of essential concepts in modern investment strategies and portfolio management, all through the lens of Python programming. The course begins by introducing foundational topics such as arithmetic and logarithmic return measurements, alongside various risk and reward measures including annualized returns, volatility, and ratios like Sharpe and Sortino. It delves into the Capital Asset Pricing Model (CAPM) to lay the groundwork for understanding asset pricing and risk management.
 
