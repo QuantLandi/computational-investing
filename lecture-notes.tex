@@ -3,6 +3,16 @@
 \usepackage{listings}
 \usepackage{amsmath}
 \usepackage{color} % For coloring code
+\usepackage{background}
+
+\backgroundsetup{
+scale=1,
+color=black,
+opacity=0.1,
+angle=45,
+position=current page.center,
+contents={\tikz\node[opacity=0.1, scale=8]{WORKING PAPER};}
+}
 
 % Define colors for code listing
 \definecolor{codegreen}{rgb}{0,0.6,0}
@@ -47,7 +57,7 @@ alexandre.landi@balanced-research.com} \\
 \maketitle
 
 \begin{abstract}
-This lecture series, "Computational Investing with Python," is designed to provide a comprehensive overview of essential concepts in modern investment strategies and portfolio management, all through the lens of Python programming. The course begins by introducing foundational topics such as arithmetic and logarithmic return measurements, alongside various risk and reward measures including annualized returns, volatility, and ratios like Sharpe and Sortino. It delves into the Capital Asset Pricing Model (CAPM) to lay the groundwork for understanding asset pricing and risk management.
+This lecture series, "Computational Investing with Python", is designed to provide a comprehensive overview of essential concepts in modern investment strategies and portfolio management, all through the lens of Python programming. The course begins by introducing foundational topics such as arithmetic and logarithmic return measurements, alongside various risk and reward measures including annualized returns, volatility, and ratios like Sharpe and Sortino. It delves into the Capital Asset Pricing Model (CAPM) to lay the groundwork for understanding asset pricing and risk management.
 
 Building upon these basics, the series progresses into Modern Portfolio Theory (MPT), exploring diverse portfolio construction techniques. From the classic Equally Weighted and Minimum Variance portfolios to more sophisticated approaches like Mean-Variance, Black-Litterman, and Multi-Factor Models, the lectures provide both theoretical knowledge and practical Python coding examples. Special attention is given to advanced strategies like Risk-Parity and Beta-Neutral portfolios, including a unique take on optimizing the covariance matrix.
 
@@ -267,6 +277,8 @@ Eureka!
 
 While the arithmetic method suggests a total return of 45\% over three years, the logarithmic method, which accurately accounts for compounding, indicates a different (and more accurate) cumulative return of 35\%. This example highlights the importance of using logarithmic returns for a more accurate assessment of portfolio performance over multiple periods.
 
+
+
 \subsection{Python Exercise: Calculating and Visualizing Returns}
 
 You are given a dataset representing the annual closing values of an investment portfolio over a five-year period with more volatile values. Calculate both the arithmetic and logarithmic returns for each year, the total returns over the entire period, and visualize the cumulative returns to see the difference visually. 
@@ -339,5 +351,237 @@ By now, you should be able to:
     \item Articulate the insights gained from the visual comparison of the two methods.
 \end{itemize}
 
+\subsection{Python Exercise: S\&P 500 Futures Data Analysis}
+
+In this exercise, you will apply the concepts of calculating and visualizing returns to real-world financial data. You will download daily data of S\&P 500 front month futures from Yahoo Finance and perform a similar analysis as above.
+
+\subsubsection{Downloading the Data}
+
+To get started, you need to download the daily price data for S\&P 500 futures. This can be done using Python's \texttt{pandas} and \texttt{yfinance} libraries. Here is a step-by-step guide to download the data and put it into a pandas dataframe:
+
+\begin{lstlisting}[language=Python]
+import yfinance as yf
+import pandas as pd
+
+# Downloading S&P 500 futures data
+ticker = "ES=F"  # S&P 500 front-month futures ticker symbol
+data = yf.download(ticker)
+
+# Creating a pandas dataframe
+sp500_data = pd.DataFrame(data)
+print(sp500_data.head())  # Displaying the first few rows
+\end{lstlisting}
+
+\subsubsection{Your Task}
+
+Using this data, calculate and plot the annual arithmetic and logarithmic returns of the S\&P 500 futures. Then, analyze the cumulative returns over the entire period. You should:
+
+\begin{enumerate}
+    \item \textbf{Calculate and Plot Cumulative Returns:} Similar to the previous exercise, calculate the cumulative arithmetic and logarithmic returns for the S\&P 500 futures data.
+    \item \textbf{Compare and Discuss:} Analyze the plots and discuss the visual differences. What insights can you gain about the performance of the S\&P 500 futures over this period?
+\end{enumerate}
+
+\subsubsection{Expected Learning Outcome}
+
+This exercise will help you to:
+\begin{itemize}
+    \item Apply the concepts of returns calculation to real-world financial data.
+    \item Develop skills in data handling and analysis using Python.
+    \item Gain insights into the practical implications of different return measurement methods in financial markets.
+\end{itemize}
+
+\textit{Note:} This exercise is exploratory and intended to deepen your understanding of financial data analysis. No solution is provided; you are encouraged to explore and interpret the data independently.
+
+\subsection{Quiz}
+For each question, select one or more correct answers.
+
+\begin{enumerate}
+    \item How are arithmetic returns calculated for an investment?
+    \begin{enumerate}
+        \item \(\frac{P_{\text{final}}}{P_{\text{initial}}} - 1\), where \(P_{\text{initial}}\) is the initial investment value and \(P_{\text{final}}\) is the value at the end of the period.
+        \item \(\ln(\frac{P_{\text{final}}}{P_{\text{initial}}})\), where \(P_{\text{initial}}\) and \(P_{\text{final}}\) are the initial and final prices of the asset, respectively.
+        \item \(\frac{P_{\text{final}} - P_{\text{initial}}}{P_{\text{initial}}}\), where \(P_{\text{initial}}\) is the initial investment value and \(P_{\text{final}}\) is the value at the end of the period.
+        \item The sum of the natural logarithm of the final price minus the natural logarithm of the initial price.
+        \item \(\frac{P_{\text{final}}}{P_{\text{initial}}}\), where \(P_{\text{final}}\) and \(P_{\text{initial}}\) are the final and initial values of the investment.
+    \end{enumerate}
+
+    \item Which of the following statements are true about the properties of logarithms?
+    \begin{enumerate}
+        \item \(\ln(a \times b) = \ln(a) + \ln(b)\) for any positive numbers \(a\) and \(b\).
+        \item \(\ln\left(\frac{a}{b}\right) = \ln(a) - \ln(b)\) for any positive numbers \(a\) and \(b\).
+        \item \(\ln(a^b) = b \times \ln(a)\) for any positive number \(a\) and any number \(b\).
+        \item \(\ln(a + b) = \ln(a) + \ln(b)\) for any positive numbers \(a\) and \(b\).
+        \item The natural logarithm of a negative number is undefined.
+    \end{enumerate}
+
+    \item How are logarithmic returns calculated for an investment?
+    \begin{enumerate}
+        \item \(\frac{P_{\text{final}} - P_{\text{initial}}}{P_{\text{initial}}}\), where \(P_{\text{initial}}\) and \(P_{\text{final}}\) are the initial and final prices of the asset, respectively.
+        \item \(\ln(\frac{P_{\text{final}}}{P_{\text{initial}}})\), where \(P_{\text{initial}}\) is the initial investment value and \(P_{\text{final}}\) is the value at the end of the period.
+        \item \(\ln(P_{\text{final}}) - \ln(P_{\text{initial}})\), where \(P_{\text{initial}}\) and \(P_{\text{final}}\) are the initial and final prices of the asset, respectively.
+        \item \(\frac{P_{\text{final}}}{P_{\text{initial}}} - 1\), where \(P_{\text{initial}}\) is the initial investment value and \(P_{\text{final}}\) is the value at the end of the period.
+        \item \(\frac{P_{\text{final}}}{P_{\text{initial}}}\), where \(P_{\text{final}}\) and \(P_{\text{initial}}\) are the final and initial values of the investment.
+    \end{enumerate}
+
+    \item Based on the advantages and disadvantages of logarithmic and arithmetic returns, which of the following statements are true?
+    \begin{enumerate}
+        \item Arithmetic returns are more accurate than logarithmic returns for multi-period analysis due to their simplicity in calculation.
+        \item Logarithmic returns inherently account for the compounding effects and are more suited for analyzing multiple-period returns.
+        \item Arithmetic returns do not consider the compounding effect, which can lead to misleading results in volatile markets over multiple periods.
+        \item Logarithmic returns cannot be used for risk assessment and volatility analysis in financial markets.
+        \item The total logarithmic return for multiple periods is the product of the logarithmic returns of each period.
+    \end{enumerate}
+
+    \item Given a dataframe of daily prices, which Python code snippet is most appropriate to compute the total logarithmic return over a multi-year period?
+    \begin{enumerate}
+        \item \texttt{total\_log\_return = df['Price'].pct\_change().sum()}
+        \item \texttt{total\_log\_return = np.log(df['Price'] / df['Price'].shift(1)).sum()}
+        \item \texttt{total\_log\_return = (df['Price'].iloc[-1] / df['Price'].iloc[0]) - 1}
+        \item \texttt{total\_log\_return = np.log(df['Price']).diff().sum()}
+        \item \texttt{total\_log\_return = (df['Price'].pct\_change() + 1).prod() - 1}
+    \end{enumerate}
+
+    \item Consider an investment with the following annual closing values over three years, starting with a \$10 million portfolio:
+    \begin{itemize}
+        \item Year 1: \$11 million
+        \item Year 2: \$8 million
+        \item Year 3: \$12 million
+    \end{itemize}
+    Using logarithmic returns, calculate the total logarithmic return and the final investment value. Which of the following statements are correct?
+    \begin{enumerate}
+        \item The total logarithmic return is approximately 0.20, and the final investment value is about \$12 million.
+        \item The total logarithmic return is approximately 0.18, and the final investment value is about \$11.8 million.
+        \item The growth factor calculated from the total logarithmic return is about 1.22.
+        \item The final investment value is approximately \$12.2 million.
+        \item The cumulative return over the three years is approximately 20\%.
+    \end{enumerate}
+
+    \item Given the following annual closing values of an investment portfolio (in millions USD):
+    \begin{itemize}
+        \item Year 0: \$10.0
+        \item Year 1: \$13.0
+        \item Year 2: \$7.0
+        \item Year 3: \$14.0
+        \item Year 4: \$8.0
+        \item Year 5: \$16.0
+    \end{itemize}
+    Which of the following lines of Python code will correctly calculate the cumulative arithmetic and logarithmic returns?
+    
+    \begin{enumerate}
+        \item \texttt{values = np.array([10.0, 13.0, 7.0, 14.0, 8.0, 16.0]) \\
+        cumulative\_arithmetic\_return = np.sum((values[1:] - values[:-1]) / values[:-1])}
+        \item \texttt{values = np.array([10.0, 13.0, 7.0, 14.0, 8.0, 16.0]) \\
+        cumulative\_logarithmic\_return = np.exp(np.sum(np.log(values[1:] / values[:-1])))}
+        \item \texttt{values = np.array([10.0, 13.0, 7.0, 14.0, 8.0, 16.0]) \\
+        cumulative\_arithmetic\_return = np.prod((values[1:] / values[:-1]) - 1)}
+        \item \texttt{values = np.array([10.0, 13.0, 7.0, 14.0, 8.0, 16.0]) \\
+        cumulative\_logarithmic\_return = np.exp(np.sum(np.log(values[1:] / values[:-1]))) - 1}
+        \item \texttt{values = np.array([10.0, 13.0, 7.0, 14.0, 8.0, 16.0]) \\
+        cumulative\_arithmetic\_return = np.cumsum((values[1:] - values[:-1]) / values[:-1])[-1]}
+    \end{enumerate}
+
+\end{enumerate}
+
+\section{Harmonizing Performance Measurement}
+
+\subsection{The Problem: Comparing Returns Over Different Time Periods}
+
+Consider three different investments, each with returns reported over different time frames. How can you know which one performed best or worst?
+
+\subsubsection*{Investment Scenarios}
+
+\begin{itemize}
+    \item \textbf{Investment A:} Reported a return of 6\% in one month.
+    \item \textbf{Investment B:} Reported a return of 15\% over three months.
+    \item \textbf{Investment C:} Reported a return of 25\% over a year.
+    \item \textbf{Investment D:} Reported a return of 0.2\% in one day.
+    \item \textbf{Investment E:} Reported a return of 1.5\% over one week.
+\end{itemize}
+
+
+
+\subsection{The Solution: Annualizing Logarithmic Returns}
+
+To fairly compare the performance of these investments over different time frames, we utilize the concept of annualizing logarithmic returns. This method allows us to standardize returns to a common time frame (one year), taking into account the effect of compounding.
+
+\subsubsection*{Understanding Logarithmic Returns}
+
+Logarithmic returns, represented as $\ln(1 + r)$ where $r$ is the return, are particularly useful when dealing with compound interest and fluctuating investment values. They allow for additive properties over time, making them ideal for aggregation over different periods.
+
+\subsubsection*{Annualizing the Returns}
+
+The annualization of logarithmic returns involves scaling the log returns to a yearly basis. This is done by multiplying the log return by the number of respective periods in a year.
+
+\subsubsection*{Calculating Annualized Returns for Each Investment}
+
+\textbf{Investment A (Monthly):}
+\begin{align*}
+    \text{Logarithmic Return} &= \ln(1 + 0.06) \\
+    \text{Annualized Return} &= \ln(1 + 0.06) \times 12 \quad \text{(12 months in a year)}
+\end{align*}
+
+\textbf{Investment B (Quarterly):}
+\begin{align*}
+    \text{Logarithmic Return} &= \ln(1 + 0.15) \\
+    \text{Annualized Return} &= \ln(1 + 0.15) \times 4 \quad \text{(4 quarters in a year)}
+\end{align*}
+
+\textbf{Investment C (Annually):}
+\begin{align*}
+    \text{Logarithmic Return} &= \ln(1 + 0.25) \quad \text{(Already annual)}
+\end{align*}
+
+\textbf{Investment D (Daily):}
+\begin{align*}
+    \text{Logarithmic Return} &= \ln(1 + 0.002) \\
+    \text{Annualized Return} &= \ln(1 + 0.002) \times 252 \quad \text{(252 trading days in a year)}
+\end{align*}
+
+\textbf{Investment E (Weekly):}
+\begin{align*}
+    \text{Logarithmic Return} &= \ln(1 + 0.015) \\
+    \text{Annualized Return} &= \ln(1 + 0.015) \times 52 \quad \text{(52 weeks in a year)}
+\end{align*}
+
+\subsubsection*{Interpreting the Results}
+
+The annualized logarithmic returns provide a standardized way to compare the investments. A higher annualized return indicates better performance over the year, irrespective of the original investment period. This method accounts for the compound nature of returns, offering a more accurate measure of performance, especially for volatile or inconsistent returns over time.
+
+\subsection{Conclusion}
+
+The annualization of logarithmic returns is a powerful tool in performance measurement, harmonizing the comparison of returns across different investment time frames. It ensures a level playing field, allowing investors and analysts to make informed decisions based on standardized and comparable data.
+
+\subsection{Quiz}
+For each question, select one or more correct answers.
+
+\begin{enumerate}
+    \item Given the following investment scenarios with different time frames, calculate the annualized logarithmic returns and identify which investments have the highest and lowest annualized returns.
+    \begin{itemize}
+        \item Investment F: Reported a return of 7\% in one month.
+        \item Investment G: Reported a return of 10\% over two months.
+        \item Investment H: Reported a return of 18\% over six months.
+        \item Investment I: Reported a return of 0.1\% in one day.
+        \item Investment J: Reported a return of 2\% over one week.
+    \end{itemize}
+    Which of the following statements are correct?
+
+    \begin{enumerate}
+        \item Investment F has the highest annualized return.
+        \item Investment I has the lowest annualized return.
+        \item Investment G has a higher annualized return than Investment H.
+        \item Investment J has a higher annualized return than Investment F.
+        \item Investment H has the highest annualized return.
+    \end{enumerate}
+
+    \item When calculating the annualized mean return using logarithmic returns for a dataset of daily returns, which of the following statements are correct?
+
+    \begin{enumerate}
+        \item The annualized mean return can be calculated by summing the logarithmic returns and multiplying by 252.
+        \item To calculate the logarithmic return for each day, you divide the price at the end of the day by the price at the beginning of the day.
+        \item The annualized mean return provides an average rate of return per month.
+        \item Logarithmic returns are preferred as they can be easily summed over time.
+        \item The annualized mean return is calculated using simple returns and does not need any scaling factor.
+    \end{enumerate}
+\end{enumerate}
 
 \end{document}
