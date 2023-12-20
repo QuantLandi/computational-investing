@@ -57,7 +57,7 @@ alexandre.landi@balanced-research.com} \\
 \maketitle
 
 \begin{abstract}
-This lecture series, "Computational Investing with Python", is designed to provide a comprehensive overview of essential concepts in modern investment strategies and portfolio management, all through the lens of Python programming. The course begins by introducing foundational topics such as arithmetic and logarithmic return measurements, alongside various risk and reward measures including annualized returns, volatility, and ratios like Sharpe and Sortino. It delves into the Capital Asset Pricing Model (CAPM) to lay the groundwork for understanding asset pricing and risk management.
+This lecture series, "Computational Investing with Python," is designed to provide a comprehensive overview of essential concepts in modern investment strategies and portfolio management, all through the lens of Python programming. The course begins by introducing foundational topics such as arithmetic and logarithmic return measurements, alongside various risk and reward measures including annualized returns, volatility, and ratios like Sharpe and Sortino. It delves into the Capital Asset Pricing Model (CAPM) to lay the groundwork for understanding asset pricing and risk management.
 
 Building upon these basics, the series progresses into Modern Portfolio Theory (MPT), exploring diverse portfolio construction techniques. From the classic Equally Weighted and Minimum Variance portfolios to more sophisticated approaches like Mean-Variance, Black-Litterman, and Multi-Factor Models, the lectures provide both theoretical knowledge and practical Python coding examples. Special attention is given to advanced strategies like Risk-Parity and Beta-Neutral portfolios, including a unique take on optimizing the covariance matrix.
 
@@ -281,7 +281,7 @@ While the arithmetic method suggests a total return of 45\% over three years, th
 
 \subsection{Python Exercise: Calculating and Visualizing Returns}
 
-You are given a dataset representing the annual closing values of an investment portfolio over a five-year period with more volatile values. Calculate both the arithmetic and logarithmic returns for each year, the total returns over the entire period, and visualize the cumulative returns to see the difference visually. 
+You are given a dataset representing the annual closing values of an investment portfolio over a five-year period with more volatile values. Calculate both the arithmetic and logarithmic returns for each year, the total returns over the entire period, and visualize the cumulative returns to see the difference visually. \\
 
 Annual closing values of the portfolio (in millions USD):
 
@@ -551,6 +551,43 @@ The annualized logarithmic returns provide a standardized way to compare the inv
 
 The annualization of logarithmic returns is a powerful tool in performance measurement, harmonizing the comparison of returns across different investment time frames. It ensures a level playing field, allowing investors and analysts to make informed decisions based on standardized and comparable data.
 
+\subsection*{Python Exercise: Downloading S\&P500 Futures Prices and Calculating Annualized Mean Logarithmic Return}
+
+\textbf{Objective:} Download the front month S\&P500 futures prices, compute the logarithmic returns, and then annualize the mean return. \\
+
+\textbf{Requirements:}
+\begin{itemize}
+    \item Python
+    \item Libraries: pandas, numpy, yfinance
+\end{itemize}
+
+\textbf{Steps:}
+
+\begin{enumerate}
+    \item \textbf{Install Required Libraries:} Ensure you have the necessary libraries installed. You can install them using pip:
+    \begin{verbatim}
+    pip install pandas numpy yfinance
+    \end{verbatim}
+
+    \begin{lstlisting}[language=Python]
+    # Import libraries
+    import pandas as pd
+    import numpy as np
+    import yfinance as yf
+
+    # Use the `yfinance` library to download the front month S&P500 futures price data.
+    sp500_futures = yf.download('ES=F')
+
+    # Calculate the daily logarithmic returns of the futures prices.
+    sp500_futures['Log_Returns'] = np.log(sp500_futures['Adj Close'] / sp500_futures['Adj Close'].shift(1))
+
+    # Annualize the mean of the logarithmic returns.
+    annualized_return = sp500_futures['Log_Return'].mean() * 252
+    print("annualized_return:", annualized_return)
+    \end{lstlisting}
+\end{enumerate}
+
+
 \subsection{Quiz}
 For each question, select one or more correct answers.
 
@@ -581,6 +618,15 @@ For each question, select one or more correct answers.
         \item The annualized mean return provides an average rate of return per month.
         \item Logarithmic returns are preferred as they can be easily summed over time.
         \item The annualized mean return is calculated using simple returns and does not need any scaling factor.
+    \end{enumerate}
+
+    \item Which of the following Python code snippets correctly calculates and annualizes the logarithmic returns of an investment based on daily price data?
+    \begin{enumerate}
+        \item \texttt{annualized\_return = np.log(df['Close'] / df['Close'].shift(1)).mean() * 252}
+        \item \texttt{annualized\_return = df['Close'].pct\_change().mean() * 252}
+        \item \texttt{annualized\_return = np.sum(np.log(df['Close'] / df['Close'].shift(1))) / len(df) * 252}
+        \item \texttt{annualized\_return = np.log(df['Adj Close'] / df['Adj Close'].shift(1)).mean() * 252}
+        \item \texttt{annualized\_return = (df['Close'].iloc[-1] / df['Close'].iloc[0] - 1) * 252}
     \end{enumerate}
 \end{enumerate}
 
