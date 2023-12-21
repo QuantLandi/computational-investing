@@ -4,6 +4,8 @@
 \usepackage{amsmath}
 \usepackage{color} % For coloring code
 \usepackage{background}
+\bibliographystyle{apalike}
+
 
 \backgroundsetup{
 scale=1,
@@ -66,9 +68,12 @@ The final section focuses on back-testing methodologies, crucial for evaluating 
 Overall, this lecture series is tailored for those looking to blend financial theory with practical Python-based applications, offering a deep dive into computational investing strategies for both academic and professional advancement.
 \end{abstract}
 
+\tableofcontents
+\clearpage
+
 \section{Measuring Performance}
 
-Imagine you are a portfolio manager entrusted with managing \$10 millions. Your primary goal is to grow this amount through strategic investments, but how will you measure your performance? This is where the concept of returns comes into play, and understanding different methods of calculating returns is crucial for your success as a portfolio manager.
+Imagine you are a portfolio manager entrusted with managing \$10 millions. Your primary goal is to grow this amount through strategic investments, but how will you measure your performance? This is where the concept of returns comes into play, and understanding different methods of calculating returns is crucial for your success as a portfolio manager \cite{bodie2018investments}.
 
 \subsection{Introducing Arithmetic Returns}
 
@@ -80,11 +85,11 @@ Arithmetic returns, also known as simple returns, are the most straightforward w
                              &= 0.1 \text{ or } 10\%
 \end{align*}
 
-This calculation seems intuitive and straightforward, right? However, arithmetic returns have limitations, especially when you are dealing with multiple time periods.
+This calculation seems intuitive and straightforward, right? However, arithmetic returns have limitations, especially when you are dealing with multiple time periods \cite{fabozzi2010foundations}.
 
 \subsection{The Problem with Arithmetic Returns}
 
-Arithmetic returns are not time-additive. This means that if you want to calculate the total return over a multi-year period, simply adding annual returns can lead to incorrect results. This limitation becomes apparent in volatile markets where investment values fluctuate significantly. \\
+Arithmetic returns are not time-additive. This means that if you want to calculate the total return over a multi-year period, simply adding annual returns can lead to incorrect results. This limitation becomes apparent in volatile markets where investment values fluctuate significantly \cite{lo1988stock}. \\
 
 For example, consider a scenario where your investment grows by 10\% in the first year but then falls by 10\% in the second year. The arithmetic return for each year would be +10\% and -10\%, respectively. You might think that your total return over these two years is 0\% (since +10\% - 10\% = 0\%). However, this is not the case because the 10\% loss in the second year is on the increased amount from the first year, not the original investment. \\
 
@@ -108,7 +113,7 @@ Assume you start with a capital of \$10 million. Your investment experiences dif
       \[ 10\% + (-10\%) = 0\% \]
 \end{itemize}
 
-Despite the arithmetic return suggesting a total return of 0\% over the two years, the actual capital at the end of Year 2 is \$9.9 million, not the original \$10 million. This example clearly demonstrates that simply adding up annual arithmetic returns can lead to incorrect conclusions about the overall investment performance, particularly in volatile markets.
+Despite the arithmetic return suggesting a total return of 0\% over the two years, the actual capital at the end of Year 2 is \$9.9 million, not the original \$10 million. This example clearly demonstrates that simply adding up annual arithmetic returns can lead to incorrect conclusions about the overall investment performance, particularly in volatile markets \cite{campbell1988dividend}.
 
 \subsection{Addressing the Issue with Logarithmic Returns}
 
@@ -143,7 +148,7 @@ This looks much better, because \$10 millions minus 1\% of \$10 millions equals 
 This approach accurately reflects the compounded effect of returns over time. Unlike the arithmetic method, logarithmic returns take into account the sequence of returns and the impact of gains and losses on the evolving investment value. As a result, the total logarithmic return provides a more realistic picture of the investment performance across multiple periods, especially in markets with significant fluctuations.          
 \\
 
-\subsection{Another Example: Arithmetic vs. Logarithmic Returns}
+\subsubsection{Another Example: Arithmetic vs. Logarithmic Returns}
 
 Now let's say that our \$10 million portfolio changes over three years as follows:
 
@@ -277,8 +282,6 @@ Eureka!
 
 While the arithmetic method suggests a total return of 45\% over three years, the logarithmic method, which accurately accounts for compounding, indicates a different (and more accurate) cumulative return of 35\%. This example highlights the importance of using logarithmic returns for a more accurate assessment of portfolio performance over multiple periods.
 
-
-
 \subsection{Python Exercise: Calculating and Visualizing Returns}
 
 You are given a dataset representing the annual closing values of an investment portfolio over a five-year period with more volatile values. Calculate both the arithmetic and logarithmic returns for each year, the total returns over the entire period, and visualize the cumulative returns to see the difference visually. \\
@@ -295,6 +298,12 @@ Annual closing values of the portfolio (in millions USD):
 \end{itemize}
 
 \subsubsection{Calculate and Plot Annual Arithmetic and Logarithmic Returns}
+
+\textbf{Requirements:}
+\begin{itemize}
+    \item Python
+    \item Libraries: pandas, numpy, matplotlib
+\end{itemize}
 
 \begin{lstlisting}[language=Python]
 import numpy as np
@@ -356,6 +365,13 @@ By now, you should be able to:
 In this exercise, you will apply the concepts of calculating and visualizing returns to real-world financial data. You will download daily data of S\&P 500 front month futures from Yahoo Finance and perform a similar analysis as above.
 
 \subsubsection{Downloading the Data}
+
+\textbf{Requirements:}
+\begin{itemize}
+    \item Python
+    \item Libraries: pandas, numpy, matplotlib, yfinance
+\end{itemize}
+yfinance
 
 To get started, you need to download the daily price data for S\&P 500 futures. This can be done using Python's \texttt{pandas} and \texttt{yfinance} libraries. Here is a step-by-step guide to download the data and put it into a pandas dataframe:
 
@@ -482,6 +498,10 @@ For each question, select one or more correct answers.
 
 \end{enumerate}
 
+
+
+\clearpage
+
 \section{Harmonizing Performance Measurement}
 
 \subsection{The Problem: Comparing Returns Over Different Time Periods}
@@ -551,7 +571,7 @@ The annualized logarithmic returns provide a standardized way to compare the inv
 
 The annualization of logarithmic returns is a powerful tool in performance measurement, harmonizing the comparison of returns across different investment time frames. It ensures a level playing field, allowing investors and analysts to make informed decisions based on standardized and comparable data.
 
-\subsection*{Python Exercise: Downloading S\&P500 Futures Prices and Calculating Annualized Mean Logarithmic Return}
+\subsection{Python Exercise: Downloading S\&P500 Futures Prices and Calculating Annualized Mean Logarithmic Return}
 
 \textbf{Objective:} Download the front month S\&P500 futures prices, compute the logarithmic returns, and then annualize the mean return. \\
 
@@ -629,5 +649,9 @@ For each question, select one or more correct answers.
         \item \texttt{annualized\_return = (df['Close'].iloc[-1] / df['Close'].iloc[0] - 1) * 252}
     \end{enumerate}
 \end{enumerate}
+
+\clearpage
+
+\bibliography{references}
 
 \end{document}
