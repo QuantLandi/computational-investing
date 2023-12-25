@@ -4,6 +4,7 @@
 \usepackage{amsmath}
 \usepackage{color} % For coloring code
 \usepackage{background}
+\usepackage{float}
 \bibliographystyle{apalike}
 
 
@@ -71,7 +72,7 @@ Overall, this lecture series is tailored for those looking to blend financial th
 \tableofcontents
 \clearpage
 
-\section{Measuring Performance}
+\section{Measuring Returns}
 
 Imagine you are a portfolio manager entrusted with managing \$10 millions. Your primary goal is to grow this amount through strategic investments, but how will you measure your performance? This is where the concept of returns comes into play, and understanding different methods of calculating returns is crucial for your success as a portfolio manager \cite{bodie2018investments}.
 
@@ -649,6 +650,771 @@ For each question, select one or more correct answers.
         \item \texttt{annualized\_return = (df['Close'].iloc[-1] / df['Close'].iloc[0] - 1) * 252}
     \end{enumerate}
 \end{enumerate}
+
+\clearpage
+
+\section{Measuring Risk}
+
+Now, suppose you are the Head of Portfolio Management at an asset management firm with \$2 billions in assets under management (AUM), and you need to hire a portfolio manager to launch a new fund. From a head hunter, you received the resumes of two candidates, along with a plot of their past performance. \\
+
+How will you choose between the two portfolio manager candidates? Most likely, it will depend on the risk appetite of the investors who are subscribing to the new fund. In the previous sections, we discussed how to measure returns, but how do we measure risk?
+
+\subsection{Volatility}
+
+A common method to measure risk in finance is by computing the standard deviation of returns, also known as volatility. Volatility measures the degree of variation in the returns of an investment over a period. High fluctuations in returns indicate higher risk. Here is how volatility is calculated:
+
+\begin{enumerate}
+    \item \textbf{Historical Return Data:}
+    Collect the historical return data of the investment over the desired period.
+
+    \item \textbf{Calculate the Mean Return:}
+        Compute the average return by summing up the individual returns and then dividing by the number of returns. For a specific example with 5 periods, the mean return is calculated as follows:
+        \[ \text{Mean Return} = \frac{\text{Return}_1 + \text{Return}_2 + \text{Return}_3 + \text{Return}_4 + \text{Return}_5}{5} \]
+    
+        For a more general case with \( n \) periods, where \( n \) could be any number of periods, the formula would be expanded as:
+        \[ \text{Mean Return} = \frac{\text{Return}_1 + \text{Return}_2 + \ldots + \text{Return}_n}{n} \]
+        Here, the ellipsis (\ldots) represents the continuation of the summation process up to the \( n \)-th term.
+    
+        Alternatively, using sigma notation for this general case, the mean return is expressed as:
+        \[ \text{Mean Return} = \frac{1}{n} \sum_{i=1}^{n} \text{Return}_i \]
+    
+        Where:
+        \begin{itemize}
+            \item $\sum$ represents the sum.
+            \item $i=1$ to $n$ indicates that the summing is done from the first period to the $n$-th period.
+            \item $\text{Return}_i$ is the return for the $i$-th period.
+            \item $n$ is the total number of periods.
+        \end{itemize}
+
+
+    \item \textbf{Calculate Deviations from the Mean:}
+    For each period's return, calculate its deviation from the mean return. In the context of computing volatility, calculating the deviation of each period's return from the mean return is essential for measuring how much the returns fluctuate around their average, providing a foundational basis for quantifying investment risk.
+    \[ \text{Deviation} = \text{Return}_i - \text{Mean Return} \]
+
+    \item \textbf{Square Each Deviation:}
+    Square the deviations to eliminate negative values. In the context of computing volatility, we square each deviation to ensure all values are positive (as negative and positive deviations would otherwise cancel each other out), providing a consistent measure of how far returns deviate from the mean, regardless of direction.
+    \[ \text{Squared Deviation} = (\text{Return}_i - \text{Mean Return})^2 \]
+
+    \item \textbf{Average of Squared Deviations:}
+    Compute the average of these squared deviations, known as variance. In computing volatility, we calculate the average of squared deviations (variance) to determine the typical squared deviation from the mean, providing a consistent measure of spread in returns.
+    \[ \text{Variance} = \frac{\sum (\text{Return}_i - \text{Mean Return})^2}{\text{Number of Returns} - 1} \]
+    Dividing by \( n-1 \) instead of \( n \) (known as Bessel's correction) provides a more accurate estimate of a population's variance from a sample by compensating for the fact that we're using the sample's mean (not the true population mean), which can otherwise underestimate the actual variability.
+
+
+    \item \textbf{Standard Deviation (Volatility):}
+    Take the square root of the variance to convert the measure back to the same unit as the original returns, thus providing a more interpretable and directly comparable measure of variability.
+    \[ \text{Volatility} = \sqrt{\text{Variance}} \]
+\end{enumerate}
+
+\textbf{Intuitive Explanation:} 
+Imagine hitting a target with several attempts. If most hits are close to the bullseye (the average), the volatility is low, indicating less risk. If the hits are widely scattered, the volatility is high, implying higher risk. In the context of hiring a portfolio manager, you would assess each manager's past portfolio performance by calculating the volatility of their returns. The choice between a manager with lower volatility and one with higher volatility will align with the risk preferences of your investors.
+
+\subsubsection{Annualizing Volatility}
+
+Annualizing volatility is a process of scaling the calculated standard deviation of returns to an annual basis, regardless of the original period of the returns. This standardization allows for a consistent comparison across investments with different time frames. Here's why and how we scale by the square root of the number of periods:
+
+\begin{enumerate}    
+    \item \textbf{Scaling Process:}
+        To annualize volatility, we multiply the standard deviation (volatility) of the returns by the square root of the number of periods in a year. The formula for annualizing volatility is given by:
+        \[ \text{Annualized Volatility} = \text{Volatility} \times \sqrt{\text{Number of Periods in a Year}} \]
+    
+        Where:
+        \begin{itemize}
+            \item $\text{Volatility}$ is the standard deviation of the returns calculated over the original time period.
+            \item $\text{Number of Periods in a Year}$ depends on the frequency of the data (e.g., 252 for daily, 52 for weekly, 12 for monthly).
+        \end{itemize}
+
+        Wait, wait, wait! Where did that square root come from? Why are we multiplying by the square root of the number of periods in a year rather than simply multiplying by the plain number of periods in a year, just like we did when we were annualizing returns in the previous section?
+
+    \item \textbf{Explanation of the Square Root in Annualizing Volatility:}
+    The reason we multiply by the square root of the number of periods in a year when annualizing volatility is because we are effectively taking the square root of the annualized variance. Recall that volatility is the standard deviation, which is the square root of variance. When we annualize the variance, we multiply the variance by the number of periods in a year. To convert this annualized variance back to volatility (standard deviation), we must take its square root.
+
+    \begin{itemize}
+        \item The annualized variance is given by:
+        \[ \text{Annualized Variance} = \text{Variance} \times \text{Number of Periods in a Year} \]
+        
+        \item Applying the square root to both sides of the equation, we use the property of square roots that $\sqrt{a \times b} = \sqrt{a} \times \sqrt{b}$:
+        \[ \sqrt{\text{Annualized Variance}} = \sqrt{\text{Variance} \times \text{Number of Periods in a Year}} \]
+        \[ \sqrt{\text{Annualized Variance}} = \sqrt{\text{Variance}}  \times \sqrt{\text{Number of Periods in a Year}} \]
+        \[ \text{Annualized Volatility} = \text{Volatility} \times \sqrt{\text{Number of Periods in a Year}} \]
+
+        \item This is why the square root of the number of periods in a year is used in the formula to annualize volatility. It ensures that the scaling of variance to an annual basis is correctly converted back to the standard deviation, providing an accurate measure of annualized volatility.
+    \end{itemize}
+
+    This explanation clarifies the mathematical reasoning behind the use of the square root in the process of annualizing volatility, ensuring that the scaling aligns with the statistical properties of variance and standard deviation.
+
+
+    
+    \item \textbf{Examples:}
+    \begin{itemize}
+        \item \textbf{Daily:} For daily returns, there are approximately 252 trading days in a year. Therefore, the annualized volatility is:
+        \[ \text{Annualized Volatility} = \text{Volatility} \times \sqrt{252} \]
+        
+        \item \textbf{Weekly:} With about 52 weeks in a year, the annualized volatility for weekly returns is:
+        \[ \text{Annualized Volatility} = \text{Volatility} \times \sqrt{52} \]
+        
+        \item \textbf{Monthly:} Given 12 months in a year, for monthly returns, the annualized volatility is:
+        \[ \text{Annualized Volatility} = \text{Volatility} \times \sqrt{12} \]
+        
+        \item \textbf{Annual:} For annual returns, the volatility is already on an annual basis, so no scaling is necessary:
+        \[ \text{Annualized Volatility} = \text{Volatility} \]
+    \end{itemize}
+\end{enumerate}
+
+This scaling allows us to compare the risk (volatility) of different investments on an equal footing, regardless of the time frame of their returns. It's particularly useful in portfolio management for making informed decisions about risk management and asset allocation.
+
+\subsection{Python Exercise: Downloading S\&P500 Futures Prices and Calculating Annualized Volatility}
+
+\textbf{Objective:} Download the front month S\&P500 futures prices, compute the logarithmic returns, and then calculate the annualized volatility. \\
+
+\textbf{Requirements:}
+\begin{itemize}
+    \item Python
+    \item Libraries: pandas, numpy, yfinance
+\end{itemize}
+
+\textbf{Steps:}
+
+\begin{enumerate}
+    \item \textbf{Install Required Libraries:} Ensure you have the necessary libraries installed. Install them using pip if needed:
+    \begin{verbatim}
+    pip install pandas numpy yfinance
+    \end{verbatim}
+
+    \begin{lstlisting}[language=Python]
+    # Import libraries
+    import pandas as pd
+    import numpy as np
+    import yfinance as yf
+
+    # Downloading S&P 500 front month futures price data using yfinance
+    sp500_futures = yf.download('ES=F')
+
+    # Calculate the daily logarithmic returns
+    sp500_futures['Log_Returns'] = np.log(sp500_futures['Adj Close'] / sp500_futures['Adj Close'].shift(1))
+
+    # Calculate the standard deviation (volatility) of the logarithmic returns
+    volatility = sp500_futures['Log_Returns'].std()
+
+    # Annualize the volatility
+    # There are approximately 252 trading days in a year
+    annualized_volatility = volatility * np.sqrt(252)
+    print("Annualized Volatility:", annualized_volatility)
+    \end{lstlisting}
+\end{enumerate}
+
+\textbf{Note:} This exercise teaches you how to calculate the annualized volatility, a key measure of risk, of S\&P 500 futures. Understanding volatility is crucial in financial markets for assessing the risk associated with investments.
+
+\subsection{Quiz}
+For each question, select one or more correct answers.
+
+\begin{enumerate}
+
+\item Which of the following statements about the properties of square roots are correct?
+    \begin{enumerate}
+        \item $\sqrt{a \times b} = \sqrt{a} \times \sqrt{b}$ for any positive numbers \(a\) and \(b\).
+        \item $\sqrt{a + b} = \sqrt{a} + \sqrt{b}$ for any positive numbers \(a\) and \(b\).
+        \item $\sqrt{a^2} = a$ for any number \(a\).
+        \item $\sqrt{a} \times \sqrt{a} = a$ for any positive number \(a\).
+        \item $\sqrt{\frac{a}{b}} = \frac{\sqrt{a}}{\sqrt{b}}$ for any positive numbers \(a\) and \(b\).
+    \end{enumerate}
+
+    \item What is the general formula for computing annualized volatility from periodic returns?
+    \begin{enumerate}
+        \item \texttt{annualized\_volatility = volatility * number\_of\_periods}
+        \item \texttt{annualized\_volatility = volatility * sqrt(number\_of\_periods)}
+        \item \texttt{annualized\_volatility = sqrt(volatility * number\_of\_periods)}
+        \item \texttt{annualized\_volatility = volatility / sqrt(number\_of\_periods)}
+        \item \texttt{annualized\_volatility = volatility * sqrt(252)}
+    \end{enumerate}
+
+    \item Consider a portfolio with a standard deviation of monthly returns (volatility) of 3\%. How is the annualized volatility computed?
+    
+    \begin{enumerate}
+        \item \texttt{annualized\_volatility = 3\% * 12}
+        \item \texttt{annualized\_volatility = 3\% * sqrt(12)}
+        \item \texttt{annualized\_volatility = 3\% / sqrt(12)}
+        \item \texttt{annualized\_volatility = 3\% * sqrt(252)}
+        \item \texttt{annualized\_volatility = sqrt(3\% * 12)}
+    \end{enumerate}
+
+    \item Consider a short series of monthly returns for an investment: 2\%, -1\%, 3\%, and 4\%. Calculate the annualized volatility of these returns.
+    \begin{enumerate}
+        \item \(5\%\)
+        \item \(10\%\)
+        \item \(14\%\)
+        \item \(20\%\)
+        \item \(25\%\)
+    \end{enumerate}
+
+    \item Based on the Python exercise to calculate the annualized volatility of S\&P 500 futures, which of the following lines of code correctly computes the annualized volatility?
+    \begin{enumerate}
+        \item \texttt{annualized\_volatility = sp500\_futures['Log\_Returns'].std() * np.sqrt(252)}
+        \item \texttt{annualized\_volatility = sp500\_futures['Log\_Returns'].std() / np.sqrt(252)}
+        \item \texttt{annualized\_volatility = sp500\_futures['Log\_Returns'].std() * 252}
+        \item \texttt{annualized\_volatility = sp500\_futures['Log\_Returns'].mean() * np.sqrt(252)}
+        \item \texttt{annualized\_volatility = sp500\_futures['Log\_Returns'].var() * np.sqrt(252)}
+    \end{enumerate}
+\end{enumerate}
+
+\subsection{Drawdown}
+
+As a portfolio manager, a client entrusted you with \$10 millions of their net worth and gave you the instruction to allocate 60\% of their capital in stocks and 40\% in bonds. One day, they come to your office and ask: "By how much our capital will go down in the worst case scenario?". What will you respond? \\
+
+There are a couple of radical answers, none of which you are likely to tell your client, unless you really want to lose them as a client: 1) "I have no idea", 2) "In the real worst case scenario, you will lose it all". Instead, you may offer some educated estimate through the analysis of historical drawdowns. \\
+
+Drawdown in finance refers to the peak-to-trough decline during a specific record period of an investment, fund, or trading account. It's a measure of downside risk, highlighting the potential loss an investor might face. Calculating drawdown involves determining the percentage loss from a peak to a subsequent trough. It's important because it helps assess the risk of a portfolio or a specific asset, providing an estimate of the maximum potential loss an investor might experience. This information is crucial for understanding the risk tolerance and managing the investment strategy accordingly. In the context of portfolio management, presenting drawdown to clients provides a realistic view of potential risks and helps in setting expectations.
+
+\subsubsection{Example: Computing Maximum Drawdown}
+
+Let's stick to the example of our client's \$10 million portfolio. Drawdown measures the peak-to-trough decline during a specific period for this investment. Let's see how it's calculated:
+
+\begin{enumerate}
+    \item \textbf{Establish the Peak:} The portfolio reaches its highest value. Let's say it peaked at \$12 million.
+    \item \textbf{Identify a Trough:} The value then drops to a low point, say \$9 million.
+    \item \textbf{Calculate Maximum Drawdown:} Maximum Drawdown is the percentage loss from the peak to the trough.
+    \begin{align*}
+        \text{Maximum Drawdown} &= \frac{\text{Peak Value} - \text{Trough Value}}{\text{Peak Value}}  \\
+                       &= \frac{\$12\text{M} - \$9\text{M}}{\$12\text{M}}  \\
+                       &= \frac{\$3\text{M}}{\$12\text{M}}\\
+                       &= 25\%
+    \end{align*}
+\end{enumerate}
+
+This calculation reveals a 25\% drawdown, indicating the maximum percentage decline from the peak during the observed period.
+
+\subsubsection{Computing Drawdown Over Time}
+
+For a more detailed analysis of portfolio drawdown, we would need to compute the drawdown on an ongoing basis. To illustrate the computation of maximum drawdown over time, let's consider a portfolio with monthly returns across a year. We'll calculate the drawdown for each month and identify the maximum drawdown. Here's an example:
+
+\begin{enumerate}
+    \item \textbf{Monthly Returns:} Suppose the portfolio has the following monthly returns (in percentages): \\ 
+
+    \begin{table}[H]
+    \centering
+    \begin{tabular}{|l|c|}
+    \hline
+    \textbf{Month} & \textbf{Return (\%)} \\ \hline
+    January        & 2                    \\ \hline
+    February       & -3                   \\ \hline
+    March          & 4                    \\ \hline
+    April          & -1                   \\ \hline
+    May            & 3                    \\ \hline
+    June           & -5                   \\ \hline
+    July           & 6                    \\ \hline
+    August         & -2                   \\ \hline
+    September      & 2                    \\ \hline
+    October        & -4                   \\ \hline
+    November       & 5                    \\ \hline
+    December       & -3                   \\ \hline
+    \end{tabular}
+    \caption{Monthly Portfolio Returns}
+    \label{table:monthly-returns}
+    \end{table}
+
+
+
+    \item \textbf{Cumulative Returns:} Calculate the cumulative return each month. For example, the cumulative return after two months would be the sum of the returns for the first and second months. With the monthly returns mentioned in the example above, our monthly cumulative returns would be the following: \\
+    
+    \begin{table}[H]
+    \centering
+    \begin{tabular}{|l|c|c|c|}
+    \hline
+    \textbf{Month}     & \textbf{Return (\%)} & \textbf{Previous Return (\%)} & \textbf{Cumulative Return (\%)} \\ \hline
+    January            & 2                    & 0                             & 2                               \\ \hline
+    February           & -3                   & 2                             & -1                              \\ \hline
+    March              & 4                    & -3                            & 3                               \\ \hline
+    April              & -1                   & 4                             & 2                               \\ \hline
+    May                & 3                    & -1                            & 5                               \\ \hline
+    June               & -5                   & 3                             & 0                               \\ \hline
+    July               & 6                    & -5                            & 6                               \\ \hline
+    August             & -2                   & 6                             & 4                               \\ \hline
+    September          & 2                    & -2                            & 6                               \\ \hline
+    October            & -4                   & 2                             & 2                               \\ \hline
+    November           & 5                    & -4                            & 7                               \\ \hline
+    December           & -3                   & 5                             & 4                               \\ \hline
+    \end{tabular}
+    \caption{Monthly Portfolio Returns with Previous and Cumulative Returns}
+    \label{table:monthly-returns-previous-cumulative}
+    \end{table}
+    
+    \item \textbf{Tracking Peaks:} Identify the highest cumulative return at each step as the new peak.
+
+    \begin{table}[H]
+    \centering
+    \begin{tabular}{|l|c|c|}
+    \hline
+    \textbf{Month}     & \textbf{Cumulative Return (\%)} & \textbf{Cumulative Max (\%)} \\ \hline
+    January            & 2                               & 2                            \\ \hline
+    February           & -1                              & 2                            \\ \hline
+    March              & 3                               & 3                            \\ \hline
+    April              & 2                               & 3                            \\ \hline
+    May                & 5                               & 5                            \\ \hline
+    June               & 0                               & 5                            \\ \hline
+    July               & 6                               & 6                            \\ \hline
+    August             & 4                               & 6                            \\ \hline
+    September          & 6                               & 6                            \\ \hline
+    October            & 2                               & 6                            \\ \hline
+    November           & 7                               & 7                            \\ \hline
+    December           & 4                               & 7                            \\ \hline
+    \end{tabular}
+    \caption{Monthly Cumulative Returns and Cumulative Maximum}
+    \label{table:monthly-cumulative-max}
+    \end{table}
+    
+
+    \item \textbf{Calculating Drawdown:} For each month, calculate the drawdown from the peak. The drawdown is the difference between the current cumulative return and the highest cumulative return to that point.
+
+    \begin{table}[H]
+    \centering
+    \begin{tabular}{|l|c|c|c|}
+    \hline
+    \textbf{Month}     & \textbf{Cumulative Return (\%)} & \textbf{Cumulative Max (\%)} & \textbf{Drawdown (\%)} \\ \hline
+    January            & 2                               & 2                            & 0                              \\ \hline
+    February           & -1                              & 2                            & 3                              \\ \hline
+    March              & 3                               & 3                            & 0                              \\ \hline
+    April              & 2                               & 3                            & 1                              \\ \hline
+    May                & 5                               & 5                            & 0                              \\ \hline
+    June               & 0                               & 5                            & 5                              \\ \hline
+    July               & 6                               & 6                            & 0                              \\ \hline
+    August             & 4                               & 6                            & 2                              \\ \hline
+    September          & 6                               & 6                            & 0                              \\ \hline
+    October            & 2                               & 6                            & 4                              \\ \hline
+    November           & 7                               & 7                            & 0                              \\ \hline
+    December           & 4                               & 7                            & 3                              \\ \hline
+    \end{tabular}
+    \caption{Monthly Cumulative Returns, Cumulative Maximum, and Ongoing Drawdown}
+    \label{table:monthly-cumulative-ongoing-drawdown}
+    \end{table}
+
+
+    \item \textbf{Maximum Drawdown:} The maximum drawdown is the largest of these drawdowns over the 12 months.
+\end{enumerate}
+
+This approach allows the portfolio manager to track how the portfolio's value has decreased from its peak over a period, providing an insight into the risk and volatility of the investment.
+
+\subsection{Python Exercise: Calculating and Plotting Ongoing Drawdown of S\&P 500 Futures}
+
+\textbf{Objective:} Download front month S\&P 500 futures prices, compute the logarithmic returns, calculate the cumulative return, and plot the ongoing drawdown with the ongoing drawdown represented as a red area. \\
+
+\textbf{Requirements:}
+\begin{itemize}
+    \item Python
+    \item Libraries: pandas, numpy, yfinance, matplotlib
+\end{itemize}
+
+\textbf{Steps:}
+\begin{enumerate}
+    \item \textbf{Install Required Libraries:} Ensure the necessary libraries are installed. Use pip to install them if needed:
+    \begin{verbatim}
+    pip install pandas numpy yfinance matplotlib
+    \end{verbatim}
+
+    \item \textbf{Download Data and Calculate Returns:}
+    \begin{lstlisting}[language=Python]
+    import pandas as pd
+    import numpy as np
+    import yfinance as yf
+    import matplotlib.pyplot as plt
+
+    # Download S&P 500 front month futures data
+    sp500_futures = yf.download('ES=F')
+
+    # Calculate logarithmic returns
+    sp500_futures['Log_Returns'] = np.log(
+        sp500_futures['Adj Close'] / sp500_futures['Adj Close'].shift(1)
+        )
+    \end{lstlisting}
+
+    \item \textbf{Calculate Cumulative Returns and Ongoing Drawdown:}
+    \begin{lstlisting}[language=Python]
+    # Calculate cumulative returns
+    sp500_futures['Cumulative_Returns'] = sp500_futures['Log_Returns'].cumsum()
+
+    # Calculate ongoing drawdown
+    rolling_max = sp500_futures['Cumulative_Returns'].cummax()
+    sp500_futures['Drawdown'] = rolling_max - sp500_futures['Cumulative_Returns']
+
+    # Plotting the results
+    fig, ax = plt.subplots()
+    ax.fill_between(sp500_futures.index, sp500_futures['Drawdown'], 
+                    color='red', alpha=0.3)
+    ax.plot(sp500_futures['Cumulative_Returns'], label='Cumulative Returns')
+    ax.set_title('Cumulative Returns and Ongoing Drawdown')
+    ax.set_xlabel('Date')
+    ax.set_ylabel('Returns/Drawdown')
+    ax.legend()
+    plt.show()
+    \end{lstlisting}
+\end{enumerate}
+
+\textbf{Note:} This exercise teaches you how to calculate and visualize the ongoing drawdown in conjunction with cumulative returns of S\&P 500 futures. The drawdown is represented as a red area in the plot, offering a visual understanding of risk in financial markets.
+
+\subsection{Python Exercise: Calculating and Plotting Ongoing Drawdown of a Mixed Portfolio}
+
+\textbf{Objective:} Construct a portfolio with 60\% weight in S\&P 500 futures (ES=F) and 40\% weight in US 10-year Treasury futures (ZN=F), calculate the logarithmic returns of the portfolio, compute the cumulative return, and plot the ongoing drawdown with the drawdown represented as a red area. Then, print the maximum drawdown. \\
+
+\textbf{Requirements:}
+\begin{itemize}
+    \item Python
+    \item Libraries: pandas, numpy, yfinance, matplotlib
+\end{itemize}
+
+\textbf{Steps:}
+\begin{enumerate}
+    \item \textbf{Install Required Libraries:} Ensure the necessary libraries are installed. Use pip to install them if needed:
+    \begin{verbatim}
+    pip install pandas numpy yfinance matplotlib
+    \end{verbatim}
+
+    \begin{lstlisting}[language=Python]
+    # Import libraries
+    import pandas as pd
+    import numpy as np
+    import yfinance as yf
+    import matplotlib.pyplot as plt
+    
+    # Download S&P 500 and US 10-year Treasury futures data
+    sp500_futures = yf.download('ES=F')['Adj Close']
+    treasury_futures = yf.download('ZN=F')['Adj Close']
+    
+    # Align the datasets
+    data = pd.DataFrame({
+        'SP500': sp500_futures,
+        'Treasury': treasury_futures
+    }).dropna()
+    
+    # Calculate daily logarithmic returns
+    data['SP500_Returns'] = np.log(data['SP500'] / data['SP500'].shift(1))
+    data['Treasury_Returns'] = np.log(data['Treasury'] / data['Treasury'].shift(1))
+    
+    # Calculate portfolio returns (60% SP500, 40% Treasury)
+    data['Portfolio_Returns'] = 0.6 * data['SP500_Returns'] + 0.4 * data['Treasury_Returns']
+    
+    # Calculate cumulative returns for SP500, Treasury, and Portfolio
+    data['Cumulative_SP500_Returns'] = data['SP500_Returns'].cumsum()
+    data['Cumulative_Treasury_Returns'] = data['Treasury_Returns'].cumsum()
+    data['Cumulative_Returns'] = data['Portfolio_Returns'].cumsum()
+    
+    # Calculate ongoing drawdown
+    rolling_max = data['Cumulative_Returns'].cummax()
+    data['Drawdown'] = rolling_max - data['Cumulative_Returns']
+    
+    # Plotting the results
+    fig, ax = plt.subplots()
+    ax.fill_between(data.index, data['Drawdown'], color='red', alpha=0.3)
+    ax.plot(data['Cumulative_Returns'], label='Portfolio Cumulative Returns')
+    ax.plot(data['Cumulative_SP500_Returns'], label='S&P 500 Cumulative Returns', linestyle='--', linewidth=0.5)
+    ax.plot(data['Cumulative_Treasury_Returns'], label='10-Year Treasury Cumulative Returns', linestyle='--', linewidth=0.5)
+    ax.set_title('Portfolio Cumulative Returns and Ongoing Drawdown')
+    ax.set_xlabel('Date')
+    ax.set_ylabel('Returns/Drawdown')
+    ax.legend()
+    plt.show()
+    
+    print("Maximum Drawdown:", data['Drawdown'].max())
+    \end{lstlisting}
+\end{enumerate}
+
+\textbf{Note:} This exercise guides you through the process of constructing a mixed asset portfolio, calculating its returns, and visualizing the risk through drawdown analysis. The plot will display the cumulative returns of the portfolio and highlight the drawdown periods in red, offering insights into the risk-return profile of the portfolio.
+
+\subsection{Quiz}
+For each question, select one or more correct answers.
+
+\begin{enumerate}
+    \item Given the example of a portfolio's monthly returns, which of the following steps are necessary to compute the maximum drawdown?
+        \begin{enumerate}
+            \item Calculate the cumulative return for each month.
+            \item Identify the month with the highest return.
+            \item Determine the drawdown from the peak for each month.
+            \item Find the month with the lowest return.
+            \item Calculate the largest drawdown from the monthly values.
+        \end{enumerate}
+
+    \item A portfolio manager is analyzing the monthly returns of a portfolio over a year. The monthly returns are as follows: [2\%, -3\%, 4\%, -1\%, 3\%, -5\%, 6\%, -2\%, 2\%, -4\%, 5\%, -3\%]. Calculate the maximum drawdown over this 12-month period.
+        \begin{enumerate}
+            \item 5\%
+            \item 7\%
+            \item 8\%
+            \item 10\%
+            \item None of the above
+        \end{enumerate}
+
+    \item A portfolio manager wants to calculate the maximum drawdown of a portfolio using Python. Given a DataFrame 'data' with a column 'Cumulative\_Returns', which line of code correctly computes the maximum drawdown?
+        \begin{enumerate}
+            \item max\_drawdown = data['Cumulative\_Returns'].min() - data['Cumulative\_Returns'].max()
+            \item max\_drawdown = (data['Cumulative\_Returns'].cummax() - data['Cumulative\_Returns']).max()
+            \item max\_drawdown = (data['Cumulative\_Returns'].max() - data['Cumulative\_Returns']).min()
+            \item max\_drawdown = data['Cumulative\_Returns'].max() - data['Cumulative\_Returns'].min()
+            \item max\_drawdown = (data['Cumulative\_Returns'] - data['Cumulative\_Returns'].cummin()).max()
+        \end{enumerate}
+
+\end{enumerate}
+
+\clearpage
+
+\section{Measuring Risk-Adjusted Returns}
+
+Once again, suppose you are the Head of Portfolio Management at an asset management firm with \$2 billions in assets under management (AUM), and you need to hire a portfolio manager to launch a new fund. From a head hunter, you received the resumes of several candidates, along with a plot of their past performance. \\
+
+How will you choose between the portfolio manager candidates? Most likely, it will depend on the risk appetite of the investors who are subscribing to the new fund. In the previous sections, we discussed how to measure returns and how to measure risk separately, but wouldn't it be helpful to be able to measure both?
+
+\subsection{Sharpe Ratio}
+
+The Sharpe Ratio is an essential tool for investors to evaluate the performance of an investment relative to its risk. It addresses a fundamental dilemma in investing: the need to balance potential returns with associated risks. \\
+
+\textbf{The Problem: Balancing Return and Risk}
+
+Investors often grapple with choosing between higher-return, higher-risk investments and lower-return, lower-risk alternatives. Opting for investments based solely on high returns disregards the risks involved. Conversely, focusing only on minimizing risk might result in underwhelming returns. The crucial challenge is striking an optimal balance between risk and return. \\
+
+\textbf{The Solution: Sharpe Ratio}
+
+The Sharpe Ratio offers a resolution to this challenge by comparing the performance of an investment to a risk-free asset, while adjusting for the investment's risk. It is calculated using the formula:
+
+\begin{equation}
+    \text{Sharpe Ratio} = \frac{R_p - R_f}{\sigma_p}
+\end{equation}
+
+where \( R_p \) represents the return of the portfolio, \( R_f \) denotes the risk-free rate (such as the return on Treasury bills), and \( \sigma_p \) is the standard deviation of the portfolio's excess return, a measure of risk. \\
+
+\textbf{Why Sharpe Ratio Works}
+
+\begin{itemize}
+    \item \textit{Risk Adjustment:} The Sharpe Ratio incorporates risk by considering the standard deviation of the portfolio’s returns, allowing for a risk-adjusted comparison of different investments.
+    \item \textit{Risk-Free Benchmarking:} It references a risk-free asset, showing the additional return earned per unit of risk taken over a risk-free investment.
+    \item \textit{Standardized Measurement:} The Sharpe Ratio provides a uniform metric to compare varied investments or portfolios, irrespective of their risk.
+    \item \textit{Reward-to-Variability:} A higher Sharpe Ratio suggests a more favorable risk-adjusted return, quantifying the 'reward-to-variability' ratio.
+\end{itemize}
+
+\textbf{Practical Application}
+
+Investors utilize the Sharpe Ratio to assess the performance of different funds, portfolios, or individual investments. Generally, a higher Sharpe Ratio is preferred, indicating a more efficient return per unit of risk. It is widely used in finance for portfolio optimization, investment decision-making, and financial planning. \\
+
+In essence, the Sharpe Ratio provides a comprehensive measure that encapsulates both expected returns and associated risks, thereby aiding investors in making well-informed investment decisions.
+
+\subsubsection{Understanding the Risk-Free Rate}
+
+The risk-free rate is a critical component in financial calculations like the Sharpe Ratio. It plays a pivotal role in investment decision-making by providing a benchmark against which the performance of risky assets can be evaluated. \\
+
+\textbf{The Problem: Assessing Return Against a Safe Benchmark}
+
+Investors face the challenge of gauging whether the returns from an investment are sufficient to compensate for the risk undertaken. To make this assessment, one needs a baseline or a benchmark that signifies a 'safe' return, with minimal to no risk involved. \\
+
+\textbf{The Solution: Risk-Free Rate}
+
+The risk-free rate serves as this benchmark. It is theoretically the rate of return of an investment with zero risk of financial loss. In practice, the risk-free rate is the return on the safest possible investment in the financial market. This rate is crucial because:
+
+\begin{itemize}
+    \item It represents the minimum return an investor would expect for any risk taken.
+    \item It serves as a baseline to compare against returns from risky investments.
+    \item It is used to calculate the excess return over a risk-free investment.
+\end{itemize}
+
+\textbf{Common Proxies for Risk-Free Rate}
+
+In practice, certain assets are typically used as proxies for the risk-free rate:
+
+\begin{itemize}
+    \item \textit{Treasury Bills:} Often, short-term government securities like U.S. Treasury bills are used, as they are backed by the government's promise and are thus considered free of credit risk.
+    \item \textit{Government Bonds:} In some cases, long-term government bonds are also used, though they may carry some risk (e.g., interest rate risk).
+\end{itemize}
+
+\textbf{Limitations of the Risk-Free Rate Concept}
+
+While the notion of a risk-free rate is widely accepted, it has certain limitations:
+
+\begin{itemize}
+    \item \textit{Theoretical Construct:} In reality, no investment is entirely risk-free. Even government securities carry minimal risks, such as inflation risk or interest rate risk.
+    \item \textit{Variability Across Countries:} The risk-free rate varies across countries, depending on their economic stability and creditworthiness.
+    \item \textit{Impact of Economic Conditions:} The risk-free rate can fluctuate with changing economic conditions, impacting investment decision metrics like the Sharpe Ratio.
+\end{itemize}
+
+In summary, the risk-free rate is a fundamental concept in finance, providing a benchmark for evaluating investment returns. However, its theoretical nature and the variability in its practical proxies necessitate careful consideration when using it in financial models and calculations.
+
+\subsection{Python Exercise: Calculating the Sharpe Ratio of S\&P 500 Futures with Annualized Data}
+
+\textbf{Objective:} Download front month S\&P 500 futures prices, compute annualized returns and volatility, download a risk-free rate series, and calculate the Sharpe Ratio. \\
+
+\textbf{Requirements:}
+\begin{itemize}
+    \item Python
+    \item Libraries: pandas, numpy, yfinance
+\end{itemize}
+
+\textbf{Steps:}
+\begin{enumerate}
+    \item \textbf{Install Required Libraries:} Ensure you have the necessary libraries installed. Use pip to install them if needed:
+    \begin{verbatim}
+    pip install pandas numpy yfinance
+    \end{verbatim}
+
+    \item \textbf{Download S\&P 500 Futures Data and Calculate Returns:}
+    \begin{lstlisting}[language=Python]
+    import pandas as pd
+    import numpy as np
+    import yfinance as yf
+
+    # Download S&P 500 front month futures data
+    sp500_futures = yf.download('ES=F')['Adj Close']
+
+    # Calculate daily logarithmic returns
+    sp500_futures['Log_Returns'] = np.log(
+        sp500_futures / sp500_futures.shift(1)
+    )
+    \end{lstlisting}
+
+    \item \textbf{Annualize Returns and Volatility:}
+    \begin{lstlisting}[language=Python]
+    # Annualize returns and volatility
+    annualized_return = sp500_futures['Log_Returns'].mean() * 252
+    annualized_volatility = sp500_futures['Log_Returns'].std() * np.sqrt(252)
+    \end{lstlisting}
+
+    \item \textbf{Download Risk-Free Rate Series:}
+    \begin{lstlisting}[language=Python]
+    # Download the 3-month Treasury bill rate as the risk-free rate
+    sp500_start_date = str(sp500_futures.index[0])[:10]
+    risk_free_rate_series = yf.download('^IRX', start=sp500_start_date)['Adj Close']
+    risk_free_rate = risk_free_rate_series.mean() / 100
+    \end{lstlisting}
+
+    \item \textbf{Calculate the Sharpe Ratio:}
+    \begin{lstlisting}[language=Python]
+    # Calculate the annual Sharpe Ratio
+    sharpe_ratio = (annualized_return - risk_free_rate) / annualized_volatility
+    print("annualized_return:", annualized_return)
+    print("risk_free_rate_annual:", risk_free_rate)
+    print("annualized_volatility:", annualized_volatility)
+    print("sharpe_ratio:", sharpe_ratio)
+    \end{lstlisting}
+\end{enumerate}
+
+\textbf{Note:} This exercise guides you through the process of calculating the annual Sharpe Ratio for S\&P 500 futures using real market data for the risk-free rate. The annual Sharpe Ratio helps assess the risk-adjusted performance of an investment relative to its annualized risk.
+
+\subsection{Python Exercise: Calculating the Sharpe Ratio of 10-Year Treasury Futures with Annualized Data}
+
+\textbf{Objective:} In this exercise, students will calculate the annualized returns, volatility, and Sharpe Ratio for the 10-year Treasury futures (ZN=F), following the steps previously taken for S\&P 500 futures. \\
+
+\textbf{Requirements:}
+\begin{itemize}
+    \item Python
+    \item Libraries: pandas, numpy, yfinance
+\end{itemize}
+
+\textbf{Task:}
+\begin{enumerate}
+    \item \textbf{Download 10-Year Treasury Futures Data:} Utilize yfinance to download the 10-year Treasury futures data (ZN=F). Focus on selecting an appropriate time period.
+    
+    \item \textbf{Calculate Daily Logarithmic Returns:} Compute daily logarithmic returns for the 10-year Treasury futures. This step is similar to what was done for the S\&P 500 futures.
+    
+    \item \textbf{Annualize Returns and Volatility:} Annualize both the returns and the volatility for the 10-year Treasury futures, akin to the procedure followed for the S\&P 500 futures.
+    
+    \item \textbf{Use the Same Risk-Free Rate Series:} Apply the 3-month Treasury bill rate as the risk-free rate, ensuring proper alignment of data by date.
+    
+    \item \textbf{Calculate the Sharpe Ratio:} Use the formula Sharpe Ratio = (Annualized Return - Risk-Free Rate) / Annualized Volatility for the 10-year Treasury futures.
+    
+    \item \textbf{Interpretation:} Analyze and contrast the calculated Sharpe Ratio for the 10-year Treasury futures with that of the S\&P 500 futures. Discuss the implications for risk-adjusted performance.
+\end{enumerate}
+
+\textbf{Considerations:}
+\begin{itemize}
+    \item Ensure correct alignment of data series by date.
+    \item Reflect on the distinct risk and return profiles of equity (S\&P 500) and debt (10-year Treasury) instruments.
+    \item Pay attention to consistency in the annualization process.
+\end{itemize}
+
+\textbf{Note:} This exercise aims to enhance students' understanding of calculating and interpreting the Sharpe Ratio for different financial instruments, providing insights into the comparative risk-adjusted performance of equity and debt investments.
+
+\subsection{Python Exercise: Calculating the Sharpe Ratio of a Mixed Portfolio with S\&P 500 and 10-Year Treasury Futures}
+
+\textbf{Objective:} This exercise focuses on constructing a mixed portfolio with 60\% weight in S\&P 500 futures (ES=F) and 40\% weight in 10-year Treasury futures (ZN=F), and then calculating the annualized returns, volatility, and Sharpe Ratio for this portfolio. \\
+
+\textbf{Requirements:}
+\begin{itemize}
+    \item Python
+    \item Libraries: pandas, numpy, yfinance
+\end{itemize}
+
+\textbf{Task:}
+\begin{enumerate}
+    \item \textbf{Download Futures Data:} Use yfinance to download both the S\&P 500 futures (ES=F) and the 10-year Treasury futures (ZN=F). Be mindful of selecting a consistent time frame for both datasets.
+    
+    \item \textbf{Calculate Daily Logarithmic Returns for Each Asset:} Compute daily logarithmic returns separately for the S\&P 500 futures and the 10-year Treasury futures.
+    
+    \item \textbf{Create a Mixed Portfolio:} Construct a mixed portfolio with 60\% allocated to S\&P 500 futures and 40\% to 10-year Treasury futures. Calculate the portfolio's daily returns based on these weights.
+    
+    \item \textbf{Annualize Portfolio Returns and Volatility:} Calculate the annualized returns and volatility of the mixed portfolio.
+    
+    \item \textbf{Utilize the Risk-Free Rate:} Apply the 3-month Treasury bill rate as the risk-free rate. Ensure the data is synchronized with the portfolio's timeline.
+    
+    \item \textbf{Calculate the Sharpe Ratio:} Using the formula Sharpe Ratio = (Annualized Return - Risk-Free Rate) / Annualized Volatility, compute the Sharpe Ratio for the mixed portfolio.
+    
+    \item \textbf{Analysis and Comparison:} Analyze the Sharpe Ratio of the mixed portfolio and compare it to the individual Sharpe Ratios of the S\&P 500 futures and the 10-year Treasury futures. Discuss the implications for diversification and risk-adjusted performance.
+\end{enumerate}
+
+\textbf{Considerations:}
+\begin{itemize}
+    \item Ensure accurate calculation and alignment of the returns for both components of the mixed portfolio.
+    \item Reflect on the impact of diversification on the risk-return profile of the portfolio.
+    \item Emphasize the importance of the Sharpe Ratio in assessing the efficiency of a mixed portfolio.
+\end{itemize}
+
+\textbf{Note:} This exercise aims to provide a practical understanding of constructing and analyzing a mixed portfolio, focusing on the concepts of diversification, risk-adjusted returns, and the significance of the Sharpe Ratio in portfolio management.
+
+\subsection{Quiz}
+For each question, select one or more correct answers.
+
+\begin{enumerate}
+    \item Why is the Sharpe Ratio considered an essential tool in evaluating investment performance?
+    \begin{enumerate}
+        \item The Sharpe Ratio only accounts for the return of an investment, ignoring its risk.
+        \item It provides a standardized measure to compare different investments, considering both risk and return.
+        \item The Sharpe Ratio allows investors to evaluate the additional return earned per unit of risk taken over a risk-free investment.
+        \item It helps in determining the highest returning portfolio without considering its volatility.
+        \item The ratio incorporates the risk-free rate, enabling a comparison of excess returns over a safe benchmark.
+    \end{enumerate}
+    
+    \item What is the significance of the risk-free rate in financial calculations, and what are its limitations?
+    \begin{enumerate}
+        \item The risk-free rate represents the guaranteed return that an investor can expect from any investment in the market.
+        \item It is used as a benchmark to assess whether the returns from a risky investment are sufficient to compensate for the risk undertaken.
+        \item Treasury Bills are often used as a proxy for the risk-free rate due to their government backing and perceived absence of credit risk.
+        \item The risk-free rate remains constant and unaffected by economic conditions or interest rate changes.
+        \item The concept of the risk-free rate has limitations as no investment is truly risk-free, and it varies across countries based on economic stability.
+    \end{enumerate}
+
+    \item When considering the risk-free rate in financial calculations, which of the following can be deemed appropriate proxies, and why?
+    \begin{enumerate}
+        \item Short-term U.S. Treasury bills, because they are backed by the U.S. government and have minimal credit risk.
+        \item Corporate bonds, as they offer higher yields compared to government securities.
+        \item Long-term U.S. Treasury bonds, though they may carry some interest rate risk.
+        \item High-yield junk bonds, due to their potential for higher returns.
+        \item Money market funds, as they are considered stable and have low risk.
+    \end{enumerate}
+
+    \item Given annualized returns, annualized volatility, and the risk-free rate from S\&P 500 futures data, which Python line(s) of code correctly compute the Sharpe Ratio?
+    \begin{enumerate}
+        \item \texttt{sharpe\_ratio = (annualized\_return - risk\_free\_rate) / annualized\_volatility}
+        \item \texttt{sharpe\_ratio = annualized\_return / annualized\_volatility}
+        \item \texttt{sharpe\_ratio = (annualized\_return + risk\_free\_rate) / annualized\_volatility}
+        \item \texttt{sharpe\_ratio = annualized\_volatility / (annualized\_return - risk\_free\_rate)}
+        \item \texttt{sharpe\_ratio = (annualized\_return - risk\_free\_rate) / np.sqrt(annualized\_volatility)}
+    \end{enumerate}
+
+    \item For a mixed portfolio comprising 60\% S\&P 500 futures and 40\% 10-year Treasury futures, which Python line(s) of code correctly contribute to computing the annual Sharpe Ratio? Assume that `sp500\_returns`, `treasury\_returns`, and `risk\_free\_rate` are already defined as the daily logarithmic returns of S\&P 500 futures, 10-year Treasury futures, and the risk-free rate, respectively.
+    \begin{enumerate}
+        \item \texttt{mixed\_portfolio\_returns = 0.6 * sp500\_returns + 0.4 * treasury\_returns}
+        \item \texttt{annualized\_return = mixed\_portfolio\_returns.mean() * 252}
+        \item \texttt{annualized\_volatility = mixed\_portfolio\_returns.std() * np.sqrt(252)}
+        \item \texttt{sharpe\_ratio = (annualized\_return - risk\_free\_rate) / annualized\_volatility}
+        \item \texttt{sharpe\_ratio = (annualized\_return + risk\_free\_rate) / annualized\_volatility}
+    \end{enumerate}
+    
+\end{enumerate}
+
+\subsection{Information Ratio}
+\subsection{Sortino Ratio}
+\subsection{Calmar Ratio}
 
 \clearpage
 
