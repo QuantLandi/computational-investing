@@ -482,7 +482,8 @@ For each question, select one or more correct answers.
         \item Year 4: \$8.0
         \item Year 5: \$16.0
     \end{itemize}
-    Which of the following lines of Python code will correctly calculate the cumulative arithmetic and logarithmic returns?
+
+    Which of the following lines of code will correctly calculate the cumulative logarithmic return?
     
     \begin{enumerate}
         \item \texttt{values = np.array([10.0, 13.0, 7.0, 14.0, 8.0, 16.0]) \\
@@ -1274,7 +1275,7 @@ For each question, select one or more correct answers.
 
 \end{enumerate}
 
-\subsubsection{Python Exercise: Comparing S\&P 500 Futures Logarithmic Returns with a Normal Distribution}
+\subsection{Python Exercise: Comparing S\&P 500 Futures Logarithmic Returns with a Normal Distribution}
 
 \textbf{Objective:} Analyze the distribution of S\&P 500 front-month futures logarithmic returns and compare it with a normal distribution curve. The exercise will involve downloading data, calculating returns, and creating a histogram with a normal distribution overlay. \\
 
@@ -1298,25 +1299,25 @@ For each question, select one or more correct answers.
 
     \item \textbf{Calculate Mean and Standard Deviation of Returns:}
     Determine the mean and standard deviation of the logarithmic returns. Store these values in variables named `mean` and `std`.
-    \begin{verbatim}
+    \begin{lstlisting}[language=Python]
     # Calculate mean and standard deviation of returns
     mean, std = log_returns.mean(), log_returns.std()
-    \end{verbatim}
+    \end{lstlisting}
 
     \item \textbf{Generate Range of Values for Normal Distribution:}
     Create a range of values (linspace) between the minimum and maximum of the logarithmic returns. Use numpy's `linspace` function and multiply the difference between max and min returns by 10000 to determine the number of bins (`n\_bins`).
-    \begin{verbatim}
+    \begin{lstlisting}[language=Python]
     # Generate a range of values for the normal distribution
     n_bins = int(max(log_returns) - min(log_returns) * 10000)
     norm_dist = np.linspace(min(log_returns), max(log_returns), n_bins)
-    \end{verbatim}
+    \end{lstlisting}
 
     \item \textbf{Calculate Normal Distribution Curve:}
     Compute the normal distribution curve with the same mean and standard deviation as the logarithmic returns. Use the `pdf` function from the `norm` module of scipy.stats.
-    \begin{verbatim}
+    \begin{lstlisting}[language=Python]
     # Calculate the normal distribution with the same mean and standard deviation
     normal_curve = norm.pdf(norm_dist, mean, std)
-    \end{verbatim}
+    \end{lstlisting}
 
     \item \textbf{Plot Histogram and Normal Distribution:}
     Create a histogram of the logarithmic returns and overlay the normal distribution curve on it. Use matplotlib's `plt.hist` for the histogram and `plt.plot` for the normal distribution curve. Ensure the histogram uses the same number of bins as calculated earlier and is colored orange. Label the histogram as 'Actual Distribution' and the curve as 'Normal Distribution'.
@@ -1327,6 +1328,9 @@ For each question, select one or more correct answers.
     \item \textbf{Finalize the Plot:}
     Add a title, labels for the x-axis ('Logarithmic Returns') and y-axis ('Frequency/Density'), and a legend to the plot. Then, display the plot using `plt.show()`.
 
+    \item \textbf{Compute and Print Measures of Return and Risk:}
+    Print the annualized return, the annulaized volatility, the skewness and the kurtosis.
+    
 \end{enumerate}
 
 This exercise will help you visualize how closely the logarithmic returns of S\&P 500 futures follow a normal distribution, providing insights into the nature of return distributions in financial markets.
@@ -1506,7 +1510,7 @@ This approach allows the portfolio manager to track how the portfolio's value ha
     \item \textbf{Calculate Cumulative Returns and Ongoing Drawdown:}
     \begin{lstlisting}[language=Python]
     # Calculate cumulative returns
-    sp500_futures['Cumulative_Returns'] = sp500_futures['Log_Returns'].cumsum()
+    sp500_futures['Cumulative_Returns'] = np.exp(sp500_futures['Log_Returns'].cumsum()) - 1
 
     # Calculate ongoing drawdown
     rolling_max = sp500_futures['Cumulative_Returns'].cummax()
@@ -1529,7 +1533,7 @@ This approach allows the portfolio manager to track how the portfolio's value ha
 
 \subsection{Python Exercise: Calculating and Plotting Ongoing Drawdown of a Mixed Portfolio}
 
-\textbf{Objective:} Construct a portfolio with 60\% weight in S\&P 500 futures (ES=F) and 40\% weight in US 10-year Treasury futures (ZN=F), calculate the logarithmic returns of the portfolio, compute the cumulative return, and plot the ongoing drawdown with the drawdown represented as a red area. Then, print the maximum drawdown. \\
+\textbf{Objective:} Construct a portfolio with 60\% weight in S\&P 500 futures (ES=F) and 40\% weight in US 10-year Treasury futures (ZN=F), calculate the logarithmic returns of the portfolio, compute the cumulative return, and plot the ongoing drawdown with the drawdown represented as a red area. Then, print the maximum drawdown, as well the other measures of return and risk we studied so far: annualized return, annualized volatility, skewness and kurtosis. \\
 
 \textbf{Requirements:}
 \begin{itemize}
@@ -1579,7 +1583,7 @@ This approach allows the portfolio manager to track how the portfolio's value ha
     
     # Plotting the results
     fig, ax = plt.subplots()
-    ax.fill_between(data.index, data['Drawdown'], color='red', alpha=0.3)
+    ax.fill_between(data.index, -data['Drawdown'], color='red', alpha=0.3)
     ax.plot(data['Cumulative_Returns'], label='Portfolio Cumulative Returns')
     ax.plot(data['Cumulative_SP500_Returns'], label='S&P 500 Cumulative Returns', linestyle='--', linewidth=0.5)
     ax.plot(data['Cumulative_Treasury_Returns'], label='10-Year Treasury Cumulative Returns', linestyle='--', linewidth=0.5)
@@ -1588,9 +1592,11 @@ This approach allows the portfolio manager to track how the portfolio's value ha
     ax.set_ylabel('Returns/Drawdown')
     ax.legend()
     plt.show()
-    
-    print("Maximum Drawdown:", data['Drawdown'].max())
     \end{lstlisting}
+
+    \item \textbf{Compute and Print Measures of Return and Risk:}
+    Print the annualized return, the annulaized volatility, the skewness, the kurtosis and the maximum drawdown.
+    
 \end{enumerate}
 
 \textbf{Note:} This exercise guides you through the process of constructing a mixed asset portfolio, calculating its returns, and visualizing the risk through drawdown analysis. The plot will display the cumulative returns of the portfolio and highlight the drawdown periods in red, offering insights into the risk-return profile of the portfolio.
@@ -1599,14 +1605,6 @@ This approach allows the portfolio manager to track how the portfolio's value ha
 For each question, select one or more correct answers.
 
 \begin{enumerate}
-    \item Given the example of a portfolio's monthly returns, which of the following steps are necessary to compute the maximum drawdown?
-        \begin{enumerate}
-            \item Calculate the cumulative return for each month.
-            \item Identify the month with the highest return.
-            \item Determine the drawdown from the peak for each month.
-            \item Find the month with the lowest return.
-            \item Calculate the largest drawdown from the monthly values.
-        \end{enumerate}
 
     \item A portfolio manager is analyzing the monthly returns of a portfolio over a year. The monthly returns are as follows: [2\%, -3\%, 4\%, -1\%, 3\%, -5\%, 6\%, -2\%, 2\%, -4\%, 5\%, -3\%]. Calculate the maximum drawdown over this 12-month period.
         \begin{enumerate}
@@ -1619,11 +1617,11 @@ For each question, select one or more correct answers.
 
     \item A portfolio manager wants to calculate the maximum drawdown of a portfolio using Python. Given a DataFrame 'data' with a column 'Cumulative\_Returns', which line of code correctly computes the maximum drawdown?
         \begin{enumerate}
-            \item max\_drawdown = data['Cumulative\_Returns'].min() - data['Cumulative\_Returns'].max()
-            \item max\_drawdown = (data['Cumulative\_Returns'].cummax() - data['Cumulative\_Returns']).max()
-            \item max\_drawdown = (data['Cumulative\_Returns'].max() - data['Cumulative\_Returns']).min()
-            \item max\_drawdown = data['Cumulative\_Returns'].max() - data['Cumulative\_Returns'].min()
-            \item max\_drawdown = (data['Cumulative\_Returns'] - data['Cumulative\_Returns'].cummin()).max()
+            \item \texttt{max\_drawdown = data['Cumulative\_Returns'].min() - \\ data['Cumulative\_Returns'].max()}
+            \item \texttt{max\_drawdown = (data['Cumulative\_Returns'].cummax() - \\ data['Cumulative\_Returns']).max()}
+            \item \texttt{max\_drawdown = (data['Cumulative\_Returns'].max() - \\ data['Cumulative\_Returns']).min()}
+            \item \texttt{max\_drawdown = data['Cumulative\_Returns'].max() - \\ data['Cumulative\_Returns'].min()}
+            \item \texttt{max\_drawdown = (data['Cumulative\_Returns'] - \\ data['Cumulative\_Returns'].cummin()).max()}
         \end{enumerate}
 
 \end{enumerate}
@@ -1823,8 +1821,26 @@ In summary, the risk-free rate is a fundamental concept in finance, providing a 
     \item \textbf{Annualize Portfolio Returns and Volatility:} Calculate the annualized returns and volatility of the mixed portfolio.
     
     \item \textbf{Utilize the Risk-Free Rate:} Apply the 3-month Treasury bill rate as the risk-free rate. Ensure the data is synchronized with the portfolio's timeline.
+
+    \item \textbf{Compute and Print Measures of Return and Risk:}
+    Print the annualized return, the annualized volatility, the skewness, the kurtosis and the maximum drawdown.
+
+    \item \textbf{Compute and Print the Sharpe Ratio:} Using the formula Sharpe Ratio = (Annualized Return - Risk-Free Rate) / Annualized Volatility, compute and print the Sharpe Ratio for the mixed portfolio.
+
+    \item \textbf{Plot the Cumulative Returns and Drawdowns:} Plot the cumulative returns and drawdowns of the mixed portfolio, as well a dashed line for the S\&P 500 futures and a dashed line for the 10-year Treasury futures cumulative profits.
+
+    \begin{lstlisting}[language=Python]
+    plt.plot(portfolio_data['Cumulative'], label='Mixed Portfolio')
+    plt.plot(sp500_data['Cumulative'], label='S&P 500 Futures', linestyle='dashed')
+    plt.plot(treasury_data['Cumulative'], label='10-Year Treasury Futures', linestyle='dashed')
+    plt.plot(portfolio_data['Drawdown'], label='Drawdowns')
     
-    \item \textbf{Calculate the Sharpe Ratio:} Using the formula Sharpe Ratio = (Annualized Return - Risk-Free Rate) / Annualized Volatility, compute the Sharpe Ratio for the mixed portfolio.
+    plt.title('Cumulative Returns and Drawdowns')
+    plt.xlabel('Date')
+    plt.ylabel('Cumulative Returns')
+    plt.legend()
+    plt.show()
+    \end{lstlisting}
     
     \item \textbf{Analysis and Comparison:} Analyze the Sharpe Ratio of the mixed portfolio and compare it to the individual Sharpe Ratios of the S\&P 500 futures and the 10-year Treasury futures. Discuss the implications for diversification and risk-adjusted performance.
 \end{enumerate}
@@ -2285,6 +2301,35 @@ In conclusion, the Information Ratio offers a nuanced perspective on a manager's
 
 \textbf{Objective for Students:} Students should complete the exercise by following the instructions provided after downloading the data. They will need to apply their understanding of Python programming and financial analysis concepts to calculate and interpret the Information Ratio of the FAANG portfolio compared to the NASDAQ.
 
+\subsection{Limitations of Sharpe Ratio and Information Ratio}
+
+While the Sharpe Ratio and Information Ratio can be helpful tools in investment analysis and portfolio management, they do have certain limitations:
+
+\subsubsection{Limitations of the Sharpe Ratio}
+\begin{enumerate}
+    \item Sensitivity to Risk-Free Rate: The Sharpe Ratio is sensitive to changes in the risk-free rate. During periods of low interest rates, the Sharpe Ratio can be artificially inflated, suggesting better risk-adjusted performance than is actually the case.
+    \item Single Period Measure: It typically uses a single-period model of risk and return, which may not accurately capture the investment's risk over multiple periods or in different market conditions.
+    \item No Distinction Between Positive and Negative Volatility: The Sharpe Ratio treats all volatility as bad, not differentiating between upside and downside volatility. This could be misleading for investments that have high positive volatility.
+\end{enumerate}
+
+\subsubsection{Limitations of the Information Ratio}
+\begin{enumerate}
+    \item Benchmark Dependency: The effectiveness of the Information Ratio is highly dependent on the choice of benchmark. An inappropriate benchmark can lead to misleading IR values.
+    \item Tracking Error as a Risk Measure: The IR uses tracking error as a measure of risk, which only reflects the deviation from the benchmark, not the total risk of the portfolio.
+    \item Not Suitable for Passive Management: The IR is less relevant for passively managed funds or portfolios that aim to replicate a benchmark, as these strategies inherently have low tracking errors.
+    \item Time Period Sensitivity: Like the Sharpe Ratio, the Information Ratio can be sensitive to the time period chosen for analysis. Different periods can yield significantly different IR values.
+\end{enumerate}
+
+\subsubsection{General Limitations}
+\begin{enumerate}
+    \item Risk Measure Limitations: Both ratios use standard deviation as a measure of risk, which may not fully capture the true risk of an investment, especially for asymmetrical return distributions..
+    \item Not Accounting for Tail Risk: Neither ratio adequately captures tail risk (the risk of extreme loss), which can be critical in assessing the safety of an investment.
+    \item Historical Data Dependency: Both ratios are based on historical data, which may not be a reliable indicator of future performance, especially in rapidly changing market conditions.
+    \item No Consideration for Investment Objectives: These metrics do not take into account the specific investment objectives or constraints of an investor.
+\end{enumerate}
+
+In summary, while the Sharpe Ratio and Information Ratio provide valuable insights into risk-adjusted returns, they should be used in conjunction with other metrics and qualitative analysis to get a comprehensive understanding of an investment's performance and risk profile.
+
 \subsection{Quiz}
 For each question, select one or more correct answers.
 
@@ -2325,11 +2370,62 @@ For each question, select one or more correct answers.
         \item \texttt{tracking\_error = excess\_returns.std() * np.sqrt(252)}
         \item \texttt{information\_ratio = annualized\_excess\_return / tracking\_error}
     \end{enumerate}
-    
+
+    \item What are the limitations of the Sharpe Ratio?
+    \begin{enumerate}
+        \item It assumes that returns are normally distributed.
+        \item It is sensitive to changes in the risk-free rate.
+        \item It treats all volatility as bad, not differentiating between upside and downside volatility.
+        \item It is sensitive to the time period chosen for analysis.
+        \item It is highly dependent on the choice of benchmark.
+    \end{enumerate}
+
+    \item What are the limitations of the Information Ratio?
+    \begin{enumerate}
+        \item It assumes that returns are normally distributed.
+        \item It is highly dependent on the choice of benchmark.
+        \item It uses tracking error as a measure of risk, which only reflects deviation from the benchmark.
+        \item It is not suitable for passively managed funds or portfolios that aim to replicate a benchmark.
+        \item It is sensitive to changes in the risk-free rate.
+    \end{enumerate}
+
 \end{enumerate}
 
 \clearpage
 
+\subsection{Sortino Ratio}
+
+The Sortino Ratio, similar to the Sharpe Ratio, is a tool for evaluating the risk-adjusted return of an investment or portfolio. However, it addresses a specific limitation of the Sharpe Ratio. \\
+
+\textbf{Main Limitation of Sharpe Ratio Addressed by Sortino Ratio:}
+
+The primary limitation of the Sharpe Ratio that the Sortino Ratio seeks to address is its treatment of all volatility as equally risky. The Sharpe Ratio does not differentiate between upside and downside volatility, treating both as indicative of risk. However, investors are typically more concerned with downside risk -- the risk of losses -- rather than volatility associated with above-average returns. \\
+
+\textbf{The Solution: Sortino Ratio}
+
+The Sortino Ratio modifies the concept of the Sharpe Ratio by focusing only on the downside risk. It is calculated using the formula:
+
+\begin{equation}
+    \text{Sortino Ratio} = \frac{R_p - R_f}{\sigma_d}
+\end{equation}
+
+where \( R_p \) represents the return of the portfolio, \( R_f \) denotes the risk-free rate, and \( \sigma_d \) is the standard deviation of the portfolio's negative returns, known as downside deviation. \\
+
+\textbf{Why Sortino Ratio Works}
+
+\begin{itemize}
+    \item \textit{Focus on Downside Risk:} The Sortino Ratio provides a more relevant measure of risk for investors who are primarily concerned about losses rather than fluctuations in positive returns.
+    \item \textit{Improved Risk Assessment:} By isolating downside volatility, the Sortino Ratio offers a more precise assessment of the risk an investor is taking in pursuit of excess returns.
+    \item \textit{Better Suitability for Asymmetrical Distributions:} For portfolios that exhibit skewed or non-normal return distributions, the Sortino Ratio can provide a more accurate picture of risk-adjusted performance.
+\end{itemize}
+
+\textbf{Practical Application}
+
+The Sortino Ratio is particularly useful for evaluating investments or strategies that aim to minimize downside risk, such as retirement portfolios or funds with loss aversion objectives. It allows investors to understand not just the return per unit of risk, but the return per unit of downside risk, aligning more closely with many investors' risk concerns. \\
+
+In conclusion, the Sortino Ratio enhances the concept of risk-adjusted return by focusing specifically on the risk that matters most to investors: the risk of losing money. It serves as a complementary metric to the Sharpe Ratio, particularly valuable when assessing investments where downside risk is a primary concern.
+
+\clearpage
 
 \bibliography{references}
 
