@@ -1880,7 +1880,7 @@ For each question, select one or more correct answers.
     \begin{enumerate}
         \item Short-term U.S. Treasury bills, because they are backed by the U.S. government and have minimal credit risk.
         \item Corporate bonds, as they offer higher yields compared to government securities.
-        \item Long-term U.S. Treasury bonds, though they may carry some interest rate risk.
+        \item Low volatility stocks that pay high dividends.
         \item High-yield junk bonds, due to their potential for higher returns.
         \item Money market funds, as they are considered stable and have low risk.
     \end{enumerate}
@@ -2001,7 +2001,7 @@ This metric substitutes the risk-free rate (\( R_f \)) in the traditional Sharpe
 
 \textbf{Note:} This exercise aims to provide a practical understanding of constructing and analyzing a mixed portfolio, focusing on the concepts of diversification, risk-adjusted returns, and the significance of the Inflation-Adjusted Sharpe Ratio in portfolio management for clients with an inflation-preservation goal.
 
-\subsection{Python Exercise: Calculating the Inflation-Adjusted Sharpe Ratio of Swensen's Portfolio}
+\subsection{Python Exercise: Calculating the Inflation-Adjusted Sharpe Ratio of a Mixed Portfolio}
 
 \textbf{Objective:} This exercise focuses on constructing a mixed portfolio with a specific asset allocation and then calculating the annualized returns, volatility, and Inflation-Adjusted Sharpe Ratio for this portfolio. \\
 
@@ -2013,7 +2013,7 @@ This metric substitutes the risk-free rate (\( R_f \)) in the traditional Sharpe
 
 \textbf{Task:}
 \begin{enumerate}
-    \item \textbf{Download Asset Data:} Use yfinance to download historical price data for the following ETFs, representing the specified asset allocation from David Swensen's portfolio described in his book "Unconventional Success: A Fundamental Approach to Personal Investment":
+    \item \textbf{Download Asset Data:} Use yfinance to download historical price data for the following ETFs:
     
     \begin{itemize}
         \item US Equity (30\%): SPDR S\&P 500 ETF Trust (SPY) or iShares Core S\&P 500 ETF (IVV)
@@ -2051,8 +2051,8 @@ For each question, select one or more correct answers.
 \begin{enumerate}
     \item When is the Inflation-Adjusted Sharpe Ratio particularly relevant for investors?
     \begin{enumerate}
-        \item Only in low-inflation environments
-        \item Only in high-inflation environments
+        \item In low-inflation environments
+        \item In high-volatility environments
         \item In environments with high inflation
         \item In environments with low volatility
         \item In environments with declining interest rates
@@ -2064,10 +2064,10 @@ For each question, select one or more correct answers.
         \item \texttt{numpy}
         \item \texttt{yfinance}
         \item \texttt{pandas\_datareader}
-        \item \texttt{matplotlib}
+        \item \texttt{}
     \end{enumerate}
 
-    \item Which of the following lines of code correctly calculates the Inflation-Adjusted Sharpe Ratio for a mixed portfolio?
+    \item Which of the following lines of code correctly calculates the Inflation-Adjusted Sharpe Ratio for a mixed portfolio? Which of the following lines of code correctly calculates the Inflation-Adjusted Sharpe Ratio for a mixed portfolio? Assume that \texttt{portfolio\_return} contains daily returns, \texttt{interest\_rate} contains the interest rate on any given day, \texttt{portfolio\_volatility} contains daily volatility and \texttt{R\_i} contains the mean interest rate.
     \begin{enumerate}
         \item \texttt{inflation\_adjusted\_sharpe\_ratio = (annualized\_return - inflation\_rate.mean()) / annualized\_volatility}
         \item \texttt{inflation\_adjusted\_sharpe\_ratio = (portfolio\_return.mean() * 252 - inflation\_rate) / portfolio\_volatility}
@@ -2385,7 +2385,7 @@ For each question, select one or more correct answers.
         \item It assumes that returns are normally distributed.
         \item It is highly dependent on the choice of benchmark.
         \item It uses tracking error as a measure of risk, which only reflects deviation from the benchmark.
-        \item It is not suitable for passively managed funds or portfolios that aim to replicate a benchmark.
+        \item It is suitable for passively managed funds or portfolios that aim to replicate a benchmark.
         \item It is sensitive to changes in the risk-free rate.
     \end{enumerate}
 
@@ -2424,6 +2424,222 @@ where \( R_p \) represents the return of the portfolio, \( R_f \) denotes the ri
 The Sortino Ratio is particularly useful for evaluating investments or strategies that aim to minimize downside risk, such as retirement portfolios or funds with loss aversion objectives. It allows investors to understand not just the return per unit of risk, but the return per unit of downside risk, aligning more closely with many investors' risk concerns. \\
 
 In conclusion, the Sortino Ratio enhances the concept of risk-adjusted return by focusing specifically on the risk that matters most to investors: the risk of losing money. It serves as a complementary metric to the Sharpe Ratio, particularly valuable when assessing investments where downside risk is a primary concern.
+
+\subsubsection{Limitations of the Sortino Ratio}
+
+While addressing certain limitations of the Sharpe Ratio, the Sortino Ratio may have at least a couple of limitations:
+
+\begin{enumerate}
+    
+    \item \textbf{Data Sensitivity:} Like the Sharpe Ratio, the Sortino Ratio is sensitive to the time period of data used. Different time periods can yield significantly different Sortino Ratios, affecting comparability and consistency.
+    
+    \item \textbf{Lack of Context for Negative Returns:} The ratio does not differentiate between frequent small losses and infrequent large losses. Two investments with the same Sortino Ratio could have very different risk profiles if one has frequent small losses and the other has rare but large losses.
+
+\end{enumerate}
+
+In summary, while the Sortino Ratio is a valuable tool for assessing risk-adjusted returns with a focus on downside risk, it should be used in conjunction with other metrics and a comprehensive understanding of an investment's risk profile.
+
+\subsection{Quiz}
+For each question, select one or more correct answers.
+
+\begin{enumerate}
+    \item How is the Sortino Ratio computed?
+    \begin{enumerate}
+        \item \(\text{Sortino Ratio} = \frac{R_p - R_f}{\sigma_p}\) where \(R_p\) is the return of the portfolio, \(R_f\) is the risk-free rate, and \(\sigma_p\) is the standard deviation of the portfolio's returns.
+        \item \(\text{Sortino Ratio} = \frac{R_p - R_f}{\sigma_d}\) where \(R_p\) is the return of the portfolio, \(R_f\) is the risk-free rate, and \(\sigma_d\) is the standard deviation of the portfolio's negative returns (downside deviation).
+        \item \(\text{Sortino Ratio} = \frac{R_p}{\sigma_d}\) where \(R_p\) is the return of the portfolio and \(\sigma_d\) is the standard deviation of the portfolio's negative returns.
+        \item \(\text{Sortino Ratio} = \frac{R_f}{\sigma_p}\) where \(R_f\) is the risk-free rate and \(\sigma_p\) is the standard deviation of the portfolio's returns.
+        \item \(\text{Sortino Ratio} = \frac{R_p}{\sigma_p}\) where \(R_p\) is the return of the portfolio and \(\sigma_p\) is the standard deviation of the portfolio's returns.
+    \end{enumerate}
+
+    \item Which statements are correct about the similarities and differences between Sortino Ratio and Sharpe Ratio?
+    \begin{enumerate}
+        \item The Sortino Ratio uses the standard deviation of the portfolio's returns (\(\sigma_p\)) whereas the Sharpe Ratio uses the downside deviation (\(\sigma_d\)).
+        \item The Sortino Ratio and the Sharpe Ratio both use the standard deviation of the portfolio's returns (\(\sigma_p\)).
+        \item The Sortino Ratio uses the downside deviation (\(\sigma_d\)) of negative returns, while the Sharpe Ratio uses the standard deviation of all returns (\(\sigma_p\)).
+        \item Both ratios adjust returns by subtracting the risk-free rate (\(R_f\)) from the portfolio returns (\(R_p\)).
+        \item The Sharpe Ratio focuses on total risk including both upside and downside volatility, whereas the Sortino Ratio focuses only on downside risk.
+    \end{enumerate}
+
+    \item Which are limitations of the Sortino Ratio?
+    \begin{enumerate}
+        \item The Sortino Ratio assumes that returns are normally distributed.
+        \item The Sortino Ratio is sensitive to the time period of data used.
+        \item The Sortino Ratio does not differentiate between upside and downside volatility.
+        \item The Sortino Ratio does not differentiate between frequent small losses and infrequent large losses.
+        \item The Sortino Ratio requires a complex calculation method for downside deviation that involves complex numbers.
+    \end{enumerate}
+
+
+\end{enumerate}
+
+\clearpage
+
+\subsection{Calmar Ratio}
+
+The Calmar Ratio, like the Sortino Ratio, is a tool for evaluating the risk-adjusted return of an investment or portfolio. However, it addresses different limitations compared to the Sortino Ratio, particularly focusing on the risk associated with significant drawdowns. \\
+
+\textbf{Limitations of Sortino Ratio Addressed by Calmar Ratio:}
+
+While the Sortino Ratio improves upon the Sharpe Ratio by focusing on downside volatility, it still does not directly address the impact of large drawdowns, which can be a significant concern for investors. The Sortino Ratio also does not differentiate between different types of negative returns, treating frequent small losses similarly to infrequent large losses. The Calmar Ratio addresses these limitations by specifically focusing on the maximum drawdown experienced by a portfolio or investment. \\
+
+\textbf{The Solution: Calmar Ratio}
+
+The Calmar Ratio measures the relationship between the annual return of an investment and its maximum drawdown over a specified period. It is defined using the formula:
+
+\begin{equation}
+    \text{Calmar Ratio} = \frac{\text{Annualized Return}}{\text{Maximum Drawdown}}
+\end{equation}
+
+where the Maximum Drawdown is the largest peak-to-trough decline in the value of the portfolio over a specified period. \\
+
+\textbf{Why Calmar Ratio Works}
+
+\begin{itemize}
+    \item \textit{Focus on Drawdown Risk:} The Calmar Ratio specifically addresses the risk of significant drawdowns, which are a primary concern for many investors.
+    \item \textit{Better Assessment of Extreme Risk:} By comparing returns to the maximum drawdown, the Calmar Ratio provides a clear picture of how much return an investment is generating per unit of the most extreme risk taken.
+    \item \textit{Useful for Long-Term Investments:} The Calmar Ratio is particularly relevant for long-term investments where the impact of large drawdowns can be more pronounced and potentially more damaging.
+\end{itemize}
+
+\textbf{Practical Application}
+
+The Calmar Ratio is most useful for evaluating the performance of investment strategies over longer periods, particularly those that aim to minimize the impact of significant market downturns. It is an important tool for retirement portfolios and long-term investment plans where recovery from large drawdowns is a critical concern. \\
+
+In conclusion, the Calmar Ratio complements the Sortino Ratio by adding a focus on the risk of large drawdowns. While the Sortino Ratio offers a measure of risk-adjusted performance considering downside volatility, the Calmar Ratio provides insights into the performance relative to the most significant declines, thereby offering a more complete view of risk-adjusted returns.
+
+\subsubsection{Limitations of the Calmar Ratio}
+
+Similar to other risk-adjusted performance metrics, the Calmar Ratio also has its limitations:
+
+\begin{enumerate}
+    \item \textbf{Period Sensitivity:} The Calmar Ratio can be highly sensitive to the time period chosen for analysis, as it depends on the occurrence and magnitude of the maximum drawdown during that period.
+    \item \textbf{Less Relevant for Short-Term Analysis:} For short-term investments or trading strategies, the Calmar Ratio may not be as relevant, given that maximum drawdowns are more impactful over longer time horizons.
+\end{enumerate}
+
+Therefore, while the Calmar Ratio is a valuable tool for assessing the performance of long-term investments against extreme risks, it should be used in conjunction with other metrics to gain a comprehensive understanding of an investment's performance and risk profile.
+
+
+\subsection{Python Exercise: Calculating and Visualizing Comprehensive Metrics for a Diversified Portfolio}
+
+\textbf{Objective:} This exercise involves calculating and visualizing a range of metrics, including the Sortino Ratio, Inflation-Adjusted Sortino Ratio, and Calmar Ratio, to assess the risk-adjusted performance of a diversified portfolio. \\
+
+\textbf{Requirements:}
+\begin{itemize}
+    \item Python
+    \item Libraries: pandas, numpy, yfinance, pandas\_datareader, matplotlib
+\end{itemize}
+
+\textbf{Task:}
+\begin{enumerate}
+    \item \textbf{Download Asset Data:} Use yfinance to download historical price data for the specified ETFs, ensuring data consistency over the selected time frame.
+    
+    \item \textbf{Calculate Daily Logarithmic Returns:} Compute the daily logarithmic returns for each ETF.
+    
+    \item \textbf{Construct the Portfolio:} Create the portfolio based on the given weights and calculate its daily returns.
+    
+    \item \textbf{Annualize Portfolio Returns:} Calculate the annualized returns of the portfolio.
+    
+    \item \textbf{Calculate Annualized Volatility:} Compute the annualized volatility (standard deviation) of the portfolio's returns.
+    
+    \item \textbf{Determine Downside Deviation:} Calculate the downside deviation. The code snippet for this is as follows:
+    \begin{lstlisting}[language=Python]
+    downside_returns = portfolio_returns[portfolio_returns < 0]
+    annualized_downside_deviation = np.sqrt(np.sum(downside_returns**2) / len(downside_returns)) * np.sqrt(252)
+    \end{lstlisting}
+
+    \item \textbf{Compute Skewness and Kurtosis:} Use pandas to calculate skewness and kurtosis of the portfolio's returns.
+    
+    \item \textbf{Calculate Maximum Drawdown:} Determine the maximum drawdown of the portfolio over the entire period.
+    
+    \item \textbf{Calculate Sharpe, Sortino, and Calmar Ratios:} Compute the Sharpe Ratio, Sortino Ratio, and Calmar Ratio for the portfolio.
+    
+    \item \textbf{Inflation Data Acquisition:} Import inflation data using the `pandas\_datareader` library.
+    
+    \item \textbf{Calculate Inflation-Adjusted Sharpe, Sortino, and Calmar Ratios:} Adjust the Sharpe, Sortino, and Calmar Ratios for inflation.
+    
+    \item \textbf{Print Metrics:} Output the annualized return, annualized volatility, skewness, kurtosis, maximum drawdown, Sharpe ratio, inflation-adjusted Sharpe ratio, Sortino ratio, inflation-adjusted Sortino ratio, Calmar ratio, and inflation-adjusted Calmar ratio.
+    
+    \item \textbf{Plot Drawdown:} Plot the ongoing drawdown of the portfolio to visualize the dips and recoveries over time.
+    
+    \item \textbf{Analysis and Interpretation:} Analyze the results, focusing on the risk-adjusted performance, the impact of inflation adjustment, and the implications of the drawdown plot. Compare the different ratios to understand the portfolio's performance from various perspectives.
+\end{enumerate}
+
+This comprehensive exercise is designed to provide a thorough understanding of portfolio performance metrics, emphasizing downside risk assessment, the impact of inflation, and visualizing risk through drawdown plots. It also introduces the Calmar Ratio as an additional measure for evaluating the portfolio's performance relative to its maximum drawdown, offering valuable insights into the diversified portfolio's behavior and its risk-return characteristics.
+
+\subsection{Quiz}
+For each question, select one or more correct answers.
+
+
+\begin{enumerate}
+
+    \item What are the differences between the Calmar Ratio and other risk-adjusted return metrics such as the Sharpe Ratio and the Sortino Ratio?
+    \begin{enumerate}
+        \item The Calmar Ratio measures return relative to the maximum drawdown, while the Sharpe and Sortino Ratios measure return relative to standard deviation.
+        \item The Calmar Ratio is calculated using downside deviation, whereas the Sharpe and Sortino Ratios use maximum drawdown.
+        \item The Calmar Ratio is not sensitive to the period of analysis, as opposed to the Sharpe and Sortino Ratios.
+        \item The Sharpe Ratio considers all volatility, whereas the Calmar Ratio focuses on the risk of large drawdowns.
+        \item The Sortino Ratio and the Calmar Ratio both focus exclusively on downside risk, but the Sortino Ratio uses downside deviation while the Calmar Ratio uses maximum drawdown.
+    \end{enumerate}
+
+    \item What are the strengths of the Calmar Ratio compared to other risk-adjusted return metrics such as the Sharpe Ratio and the Sortino Ratio?
+    \begin{enumerate}
+        \item The Calmar Ratio provides a more comprehensive view of risk by considering the maximum drawdown, which is not directly addressed by the Sharpe or Sortino Ratios.
+        \item The Calmar Ratio is less sensitive to the time period of analysis compared to the Sharpe and Sortino Ratios.
+        \item The Calmar Ratio is particularly relevant for long-term investments because it provides insight on how long it will take to recover from worst-case losses, unlike the Sharpe and Sortino Ratios.
+        \item The Calmar Ratio specifically focuses on the risk of significant drawdowns, which is a primary concern for many investors, whereas the Sharpe and Sortino Ratios focus on volatility and downside volatility, respectively.
+        \item The Calmar Ratio's emphasis on maximum drawdown makes it a valuable metric during periods of market stress or downturns, offering a different perspective compared to the Sharpe and Sortino Ratios.
+    \end{enumerate}
+
+    \item Which of the following lines of Python code correctly compute the Sortino Ratio?
+    \begin{enumerate}
+        \item \begin{verbatim}
+        sortino_ratio = (portfolio_return - risk_free_rate)
+        / np.std(portfolio_returns)
+        \end{verbatim}
+        \item \begin{verbatim}
+        downside_returns = portfolio_returns[portfolio_returns < 0]
+        sortino_ratio = (portfolio_return - risk_free_rate)
+        / np.std(downside_returns)
+        \end{verbatim}
+        \item \begin{verbatim}
+        downside_returns = portfolio_returns[portfolio_returns < 0]
+        sortino_ratio = (portfolio_return - risk_free_rate)
+        / (np.sqrt(np.sum(downside_returns**2) / 
+        len(downside_returns)) * np.sqrt(252))
+        \end{verbatim}
+        \item \begin{verbatim}
+        sortino_ratio = (portfolio_return - risk_free_rate) /
+        np.std(portfolio_returns[portfolio_returns < 0])
+        \end{verbatim}
+        \item \begin{verbatim}
+        annualized_downside_deviation = 
+        portfolio_returns[portfolio_returns < 0].std() * np.sqrt(252)
+        sortino_ratio = (portfolio_return - risk_free_rate) / annualized_downside_deviation
+        \end{verbatim}
+    \end{enumerate}
+
+    \item Which of the following lines of Python code correctly compute the Calmar Ratio?
+    \begin{enumerate}
+        \item \begin{verbatim}
+        calmar_ratio = annualized_return / max_drawdown
+        \end{verbatim}
+        \item \begin{verbatim}
+        calmar_ratio = annualized_return / np.std(portfolio_returns)
+        \end{verbatim}
+        \item \begin{verbatim}
+        calmar_ratio = (annualized_return + risk_free_rate) / max_drawdown
+        \end{verbatim}
+        \item \begin{verbatim}
+        max_drawdown = np.min(rolling_max - portfolio_value) / rolling_max
+        calmar_ratio = annualized_return / max_drawdown
+        \end{verbatim}
+        \item \begin{verbatim}
+        calmar_ratio = annualized_return / np.min(portfolio_returns)
+        \end{verbatim}
+    \end{enumerate}
+
+
+\end{enumerate}
 
 \clearpage
 
